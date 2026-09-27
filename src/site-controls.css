@@ -23,6 +23,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #f7df9d;outline-offset:4p
 .site-footer{position:relative;z-index:2;padding:18px 20px 35px;text-align:center;background:#ddcaad}
 .footer-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .footer-actions button{border:1px solid rgba(142,105,47,.42);border-radius:999px;padding:8px 13px;background:rgba(255,253,248,.55);color:var(--mocha);font-size:.8rem;min-height:44px}
+.footer-order{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(142,105,47,.42);border-radius:999px;padding:8px 16px;background:rgba(255,253,248,.55);color:var(--mocha);font-size:.8rem;min-height:44px;text-decoration:none}
 .toast{position:fixed;z-index:80;bottom:78px;left:50%;transform:translateX(-50%) translateY(10px);opacity:0;pointer-events:none;background:#271d16;color:#fff1d5;border:1px solid #b89560;border-radius:100px;padding:7px 20px;white-space:nowrap;transition:opacity .2s,transform .2s}
 .toast.is-visible{opacity:1;transform:translateX(-50%)}
 .countdown__unit{position:relative;min-width:0;padding:1rem .25rem .8rem;border:1px solid rgba(194,153,79,.34);border-radius:1.6rem 1.6rem .7rem .7rem;background:linear-gradient(180deg,rgba(255,253,248,.92),rgba(250,242,229,.7));box-shadow:0 10px 26px rgba(109,81,56,.1),inset 0 1px 0 rgba(255,255,255,.9)}

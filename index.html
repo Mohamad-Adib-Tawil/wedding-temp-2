@@ -91,7 +91,7 @@
       <section class="sec closing creveal"><span class="lamp" aria-hidden="true"></span><p class="closing__note" data-copy="closing"></p><p class="closing__families"><span data-name="groom"></span> <span aria-hidden="true">&amp;</span> <span data-name="bride"></span></p></section>
       <div class="hall__floor" aria-hidden="true"></div>
     </article>
-    <footer class="site-footer"><div class="footer-actions"><button id="share-button" type="button" data-copy="share"></button><button id="copy-link" type="button" data-copy="copyLink"></button><button id="replay-invitation" type="button" data-copy="replay"></button></div></footer>
+    <footer class="site-footer"><div class="footer-actions"><a id="order-whatsapp" class="footer-order" target="_blank" rel="noopener noreferrer" data-copy="order"></a><button id="share-button" type="button" data-copy="share"></button><button id="copy-link" type="button" data-copy="copyLink"></button><button id="replay-invitation" type="button" data-copy="replay"></button></div></footer>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
@@ -110,7 +110,7 @@ const weddingConfig = Object.freeze({
   program: [], // [{ time: '19:00', title: '...' }]
   guestNotes: [],
   rsvp: {
-    whatsappNumber: '', // International digits, without +
+    whatsappNumber: '963992688759', // International digits, without +
     contactName: '',
     deadline: '',
   },
@@ -155,6 +155,7 @@ const weddingConfig = Object.freeze({
     rsvpDescription: 'يسعدنا تأكيد حضوركم عبر واتساب',
     rsvpDeadline: 'يرجى تأكيد الحضور قبل',
     rsvpButton: 'التأكيد عبر واتساب',
+    order: 'اطلبه',
     rsvpMessage: 'مرحبًا، أود تأكيد حضوري حفل زفاف محمد أديب طويل ورزان بطايحي.',
     closing: 'بحضوركم تضيء ليلتنا',
     share: 'مشاركة الدعوة',
@@ -506,6 +507,7 @@ function renderOptionalSections() {
     }));
   }
   if (/^\d{7,15}$/.test(config.rsvp.whatsappNumber)) {
+    $('#order-whatsapp').href = `https://wa.me/${config.rsvp.whatsappNumber}`;
     $('#rsvp-section').hidden = false;
     if (config.rsvp.deadline) {
       $('#rsvp-deadline').hidden = false;

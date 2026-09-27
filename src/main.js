@@ -125,6 +125,7 @@ function renderOptionalSections() {
     }));
   }
   if (/^\d{7,15}$/.test(config.rsvp.whatsappNumber)) {
+    $('#order-whatsapp').href = `https://wa.me/${config.rsvp.whatsappNumber}`;
     $('#rsvp-section').hidden = false;
     if (config.rsvp.deadline) {
       $('#rsvp-deadline').hidden = false;

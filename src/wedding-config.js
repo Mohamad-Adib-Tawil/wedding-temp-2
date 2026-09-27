@@ -13,7 +13,7 @@ export const weddingConfig = Object.freeze({
   program: [], // [{ time: '19:00', title: '...' }]
   guestNotes: [],
   rsvp: {
-    whatsappNumber: '', // International digits, without +
+    whatsappNumber: '963992688759', // International digits, without +
     contactName: '',
     deadline: '',
   },
@@ -58,6 +58,7 @@ export const weddingConfig = Object.freeze({
     rsvpDescription: 'يسعدنا تأكيد حضوركم عبر واتساب',
     rsvpDeadline: 'يرجى تأكيد الحضور قبل',
     rsvpButton: 'التأكيد عبر واتساب',
+    order: 'اطلبه',
     rsvpMessage: 'مرحبًا، أود تأكيد حضوري حفل زفاف محمد أديب طويل ورزان بطايحي.',
     closing: 'بحضوركم تضيء ليلتنا',
     share: 'مشاركة الدعوة',
