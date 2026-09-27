@@ -51,8 +51,10 @@ function downloadCalendar(start, end) {
   const anchor = document.createElement('a');
   anchor.href = url;
   anchor.download = 'wedding-invitation.ics';
+  document.body.append(anchor);
   anchor.click();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
 }
 
 function renderEvent() {
