@@ -10,6 +10,7 @@ function element() {
     setAttribute() {}, focus() {},
     addEventListener(name, callback) { listeners.set(name, callback); },
     click() { listeners.get('click')?.(); },
+    emit(name, event) { listeners.get(name)?.(event); },
   };
 }
 
@@ -17,7 +18,7 @@ function setup(reduced) {
   const selectors = Object.fromEntries([
     '#experience', '#wedding-content', '#open-invitation', '.cover-content', '#hall-content',
     '#skip-intro', '#continue-to-site', '#replay-invitation', '#sound-toggle',
-    '#background-music', '#home',
+    '#background-music', '#door-video', '#home',
   ].map((key) => [key, element()]));
   const arch = element();
   selectors['#experience'].querySelector = () => arch;
@@ -28,6 +29,11 @@ function setup(reduced) {
     return Promise.resolve();
   };
   selectors['#background-music'].pause = () => { selectors['#background-music'].paused = true; };
+  selectors['#door-video'].play = () => {
+    selectors['#door-video'].paused = false;
+    return Promise.resolve();
+  };
+  selectors['#door-video'].pause = () => { selectors['#door-video'].paused = true; };
   globalThis.document = {
     querySelector: (selector) => selectors[selector],
     body: { classList: { add() {}, remove() {} } },
@@ -56,6 +62,19 @@ test('normal opening starts audio only after the guest clicks', () => {
   assert.equal(app.plays, 0);
   app.selectors['#open-invitation'].click();
   assert.equal(app.plays, 1);
+  assert.equal(app.selectors['#door-video'].paused, false);
+  app.selectors['#door-video'].emit('ended');
+  assert.equal(app.selectors['#experience'].dataset.stage, 'hall');
   app.selectors['#skip-intro'].click();
   assert.equal(app.selectors['#experience'].hidden, true);
+  assert.equal(app.selectors['#door-video'].paused, true);
+});
+
+test('scrolling down from the hall reveals the invitation', () => {
+  const app = setup(false);
+  app.selectors['#open-invitation'].click();
+  app.selectors['#door-video'].emit('ended');
+  app.selectors['#experience'].emit('wheel', { deltaY: 50 });
+  assert.equal(app.selectors['#experience'].hidden, true);
+  assert.equal(app.selectors['#wedding-content'].inert, false);
 });

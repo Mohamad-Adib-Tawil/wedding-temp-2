@@ -10,9 +10,11 @@ export function initExperience(config, showToast) {
   const replayButton = document.querySelector('#replay-invitation');
   const soundButton = document.querySelector('#sound-toggle');
   const audio = document.querySelector('#background-music');
+  const doorVideo = document.querySelector('#door-video');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const timers = new Set();
   let started = false;
+  let touchStartY = null;
 
   if (config.audioPath) audio.src = config.audioPath;
 
@@ -46,11 +48,23 @@ export function initExperience(config, showToast) {
 
   function revealSite() {
     clearTimeline();
+    doorVideo.pause();
     root.hidden = true;
     site.inert = false;
     site.setAttribute('aria-hidden', 'false');
     document.body.classList.remove('is-locked');
     document.querySelector('#home').focus({ preventScroll: true });
+  }
+
+  function showHall() {
+    if (root.hidden || root.dataset.stage !== 'opening') return;
+    root.dataset.stage = 'hall';
+    root.dataset.flash = 'on';
+    hallContent.hidden = false;
+    schedule(() => { root.dataset.reveal = '1'; }, 450);
+    schedule(() => { root.dataset.reveal = '2'; }, 1250);
+    schedule(() => { root.dataset.reveal = '3'; }, 2100);
+    schedule(revealSite, 7800);
   }
 
   function startOpening() {
@@ -66,19 +80,16 @@ export function initExperience(config, showToast) {
       return;
     }
     root.dataset.stage = 'opening';
-    root.dataset.flash = 'on';
-    schedule(() => {
-      root.dataset.stage = 'hall';
-      hallContent.hidden = false;
-    }, 2400);
-    schedule(() => { root.dataset.reveal = '1'; }, 3300);
-    schedule(() => { root.dataset.reveal = '2'; }, 4100);
-    schedule(() => { root.dataset.reveal = '3'; }, 5000);
-    schedule(revealSite, 10500);
+    doorVideo.currentTime = 0;
+    doorVideo.play().catch(showHall);
+    schedule(showHall, 16_000);
   }
 
   function replay() {
     clearTimeline();
+    touchStartY = null;
+    doorVideo.pause();
+    doorVideo.currentTime = 0;
     audio.pause();
     audio.currentTime = 0;
     started = false;
@@ -90,6 +101,7 @@ export function initExperience(config, showToast) {
     root.hidden = false;
     root.dataset.stage = 'cover';
     root.dataset.flash = 'off';
+    root.dataset.video = 'poster';
     root.dataset.reveal = '0';
     coverContent.inert = false;
     hallContent.hidden = true;
@@ -99,7 +111,26 @@ export function initExperience(config, showToast) {
   }
 
   openButton.addEventListener('click', startOpening);
-  root.querySelector('.arch').addEventListener('click', startOpening);
+  root.querySelector('.cover-scene').addEventListener('click', startOpening);
+  coverContent.addEventListener('click', startOpening);
+  doorVideo.addEventListener('playing', () => { root.dataset.video = 'playing'; });
+  doorVideo.addEventListener('timeupdate', () => {
+    if (root.dataset.stage === 'opening' && doorVideo.currentTime >= 8.85) root.dataset.flash = 'on';
+  });
+  doorVideo.addEventListener('ended', showHall);
+  doorVideo.addEventListener('error', showHall);
+  root.addEventListener('wheel', (event) => {
+    if (root.dataset.stage === 'hall' && event.deltaY > 12) revealSite();
+  }, { passive: true });
+  root.addEventListener('touchstart', (event) => {
+    if (root.dataset.stage === 'hall') touchStartY = event.touches[0]?.clientY ?? null;
+  }, { passive: true });
+  root.addEventListener('touchend', (event) => {
+    if (root.dataset.stage !== 'hall' || touchStartY === null) return;
+    const distance = touchStartY - (event.changedTouches[0]?.clientY ?? touchStartY);
+    touchStartY = null;
+    if (distance > 45) revealSite();
+  }, { passive: true });
   skipButton.addEventListener('click', revealSite);
   continueButton.addEventListener('click', revealSite);
   replayButton.addEventListener('click', replay);
@@ -113,6 +144,7 @@ export function initExperience(config, showToast) {
   reduceMotion.addEventListener('change', () => {
     if (!reduceMotion.matches) return;
     audio.pause();
+    doorVideo.pause();
     updateSoundButton();
     if (started && !root.hidden) revealSite();
   });

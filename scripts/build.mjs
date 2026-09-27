@@ -17,6 +17,8 @@ const replacements = {
   '%PAGE_DESCRIPTION%': weddingConfig.copy.pageDescription,
   '%SITE_URL%': siteUrl,
   '%SOCIAL_IMAGE_URL%': new URL(weddingConfig.socialPreviewPath, siteUrl).href,
+  '%COVER_POSTER_URL%': weddingConfig.coverPosterPath,
+  '%ENTRANCE_VIDEO_URL%': weddingConfig.entranceVideoPath,
 };
 let html = await readFile(new URL('../index.template.html', import.meta.url), 'utf8');
 for (const [token, value] of Object.entries(replacements)) html = html.replaceAll(token, escapeHtml(value));

@@ -1,0 +1,225 @@
+@font-face {
+  font-family: 'Aref Ruqaa';
+  src: url('../assets/fonts/ArefRuqaa-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Aref Ruqaa';
+  src: url('../assets/fonts/ArefRuqaa-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Tajawal;
+  src: url('../assets/fonts/Tajawal-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Tajawal;
+  src: url('../assets/fonts/Tajawal-Medium.ttf') format('truetype');
+  font-weight: 500 700;
+  font-display: swap;
+}
+
+:root {
+  --ink: #4a3728;
+  --deep: #241a12;
+  --gold: #c2994f;
+  --light-gold: #ecd7a2;
+  --paper: #faf5eb;
+  --paper-deep: #ecdcc4;
+  --font: Tajawal, sans-serif;
+  --display-font: 'Aref Ruqaa', Amiri, serif;
+}
+
+body { background: var(--paper-deep); font-family: var(--font); }
+
+.experience {
+  background: #241a12;
+  color: #fff7e7;
+}
+
+.experience::before {
+  z-index: 4;
+  background: linear-gradient(90deg, rgba(20, 11, 6, .36), transparent 25%, transparent 75%, rgba(20, 11, 6, .36));
+}
+
+.cover-scene {
+  display: block;
+  background: #241a12 url('../new_assets/thurayya-poster.jpg') center / cover no-repeat;
+  transition: opacity 1.15s ease;
+  cursor: pointer;
+}
+
+.door-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.experience[data-video="playing"] .door-video { opacity: 1; }
+
+.cover-content {
+  pointer-events: none;
+  padding-top: clamp(24px, 4svh, 45px);
+  padding-bottom: max(25px, env(safe-area-inset-bottom));
+  text-shadow: 0 3px 17px rgba(14, 8, 5, .95);
+}
+
+.cover-eyebrow {
+  color: #f3e6cd;
+  font-family: var(--font);
+  font-size: clamp(17px, 2vw, 22px);
+  letter-spacing: 0;
+}
+
+.cover-ornament { margin: 2svh 0 0; }
+
+.cover-names {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: .18em;
+  margin: 0;
+  color: #fff7e7;
+  font-family: var(--display-font);
+  font-size: clamp(40px, 8vw, 58px);
+  line-height: 1.2;
+  -webkit-text-stroke: .4px rgba(216, 178, 108, .38);
+}
+
+.cover-names i { font-size: .45em; }
+
+.cover-hint {
+  color: #efe1c8;
+  font-family: var(--font);
+  font-size: clamp(18px, 2.4vw, 24px);
+}
+
+.cover-open {
+  pointer-events: auto;
+  min-height: 44px;
+  padding: 3px 29px;
+  font-family: var(--font);
+  font-size: 19px;
+}
+
+.opening-flash {
+  background: radial-gradient(ellipse at 50% 48%, #fffefa 0%, #fff9e9 42%, rgba(255, 242, 218, .7) 100%);
+}
+
+.experience[data-flash="on"] .opening-flash { animation: thurayya-flash 2.1s ease-out both; }
+
+@keyframes thurayya-flash {
+  0% { opacity: 0; }
+  48% { opacity: .92; }
+  100% { opacity: 0; }
+}
+
+.hall-scene {
+  background: #b69a7e url('../new_assets/thurayya-hall-tux.webp') center / cover no-repeat;
+  transition: opacity 1.2s ease, transform 5s ease;
+}
+
+.hall-scene::before {
+  background: linear-gradient(to bottom, rgba(34, 20, 12, .40), rgba(34, 20, 12, .13) 52%, transparent 70%);
+  opacity: 1;
+}
+
+.hall-glow { opacity: 0; }
+.sparkles { opacity: .18; }
+
+.hall-content {
+  justify-content: flex-start;
+  padding: clamp(65px, 15svh, 150px) 20px 0;
+}
+
+.hall-kicker {
+  color: #fffaf0;
+  font-family: var(--font);
+  font-size: clamp(17px, 2vw, 22px);
+  letter-spacing: 0;
+}
+
+.hall-content .small-star { margin: 2px 0 5px; }
+
+.hall-names {
+  color: #fff8e9;
+  font-family: var(--display-font);
+  font-size: clamp(48px, 10vw, 75px);
+  line-height: 1.08;
+  text-shadow: 0 2px 8px rgba(22, 13, 6, .85), 0 4px 24px rgba(22, 13, 6, .7);
+}
+
+.hall-line {
+  font-family: Amiri, serif;
+  font-size: clamp(20px, 2.4vw, 27px);
+  line-height: 1.45;
+  margin: 9px 0 3px;
+}
+
+.hall-continue { font-family: var(--font); font-size: 17px; }
+.skip-intro, .sound-toggle { font-family: var(--font); }
+
+main { background: #faf5eb; }
+
+.intro-section {
+  min-height: 95svh;
+  background: radial-gradient(ellipse at 50% 40%, #fffcf5, #faf5eb 65%, #f0e5d3);
+}
+
+.intro-section::before, .letter-section::before {
+  border-color: rgba(142, 105, 47, .32);
+}
+
+.intro-bismillah, .intro-names, .letter-card h2, .detail-section h2 {
+  font-family: var(--display-font);
+}
+
+.intro-bismillah { color: #8e692f; font-size: clamp(25px, 3vw, 39px); }
+
+.intro-verse {
+  max-width: 680px;
+  margin: 16px auto 0;
+  color: #5a4130;
+  font-family: Amiri, serif;
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.9;
+}
+
+.intro-verse-source { margin: 5px auto 30px; color: #8e692f; font-size: 15px; }
+.overline { color: #8e692f; letter-spacing: 0; }
+.intro-names { font-size: clamp(38px, 5vw, 62px); line-height: 1.28; }
+.intro-message, .letter-card p { font-family: Amiri, serif; }
+
+.letter-section { background: linear-gradient(#f0e4d1, #faf5eb); }
+.letter-card { border-color: rgba(142, 105, 47, .44); }
+.detail-section h2 { color: #6d5138; }
+.footer { background: #3d2b1d; }
+.footer-names { font-family: var(--display-font); font-size: 28px; }
+
+@media (min-width: 900px) {
+  .cover-scene { background-size: auto 100%; background-repeat: no-repeat; }
+  .door-video { left: 50%; right: auto; width: min(100%, 56.25svh); transform: translateX(-50%); }
+  .hall-scene { background-image: url('../new_assets/thurayya-hall-tux-wide-v2.webp'); }
+  .hall-content { padding-top: clamp(95px, 14svh, 165px); }
+  .hall-names { font-size: clamp(56px, 5vw, 76px); }
+}
+
+@media (max-width: 520px) {
+  .cover-content { padding-top: 4svh; }
+  .cover-ornament { margin: 2svh 0 0; }
+  .hall-content { padding-top: 15svh; }
+  .hall-names { font-size: clamp(46px, 12vw, 58px); }
+  .hall-line { max-width: 345px; }
+  .intro-section { padding: 90px 28px; }
+}

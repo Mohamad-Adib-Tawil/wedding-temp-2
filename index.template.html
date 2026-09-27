@@ -11,35 +11,26 @@
     <meta property="og:description" content="%PAGE_DESCRIPTION%">
     <meta property="og:url" content="%SITE_URL%">
     <meta property="og:image" content="%SOCIAL_IMAGE_URL%">
-    <meta property="og:image:width" content="1733">
-    <meta property="og:image:height" content="907">
+    <meta property="og:image:width" content="1731">
+    <meta property="og:image:height" content="909">
     <meta name="twitter:card" content="summary_large_image">
     <title>%PAGE_TITLE%</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/fonts/Amiri-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="assets/fonts/ArefRuqaa-Bold.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="src/thurayya-theme.css">
     <script type="module" src="src/main.js"></script>
   </head>
   <body class="is-locked">
     <div id="experience" class="experience" data-stage="cover">
       <div class="cover-scene" aria-hidden="true">
-        <div class="arch">
-          <div class="arch-glow"></div>
-          <div class="door door--right"></div>
-          <div class="door door--left"></div>
-          <div class="door-knob door-knob--right"></div>
-          <div class="door-knob door-knob--left"></div>
-        </div>
-        <img class="cover-bride" src="new_assets/cover-bride.webp" alt="">
+        <video id="door-video" class="door-video" poster="%COVER_POSTER_URL%" muted playsinline preload="metadata">
+          <source src="%ENTRANCE_VIDEO_URL%" type="video/mp4">
+        </video>
       </div>
       <div class="hall-scene" aria-hidden="true">
         <div class="hall-glow"></div>
-        <div class="curtain curtain--right"></div>
-        <div class="curtain curtain--left"></div>
-        <img class="chandelier chandelier--main" src="assets/chandelier.svg" alt="">
-        <img class="chandelier chandelier--small chandelier--right" src="assets/chandelier.svg" alt="">
-        <img class="chandelier chandelier--small chandelier--left" src="assets/chandelier.svg" alt="">
-        <div class="hall-floor"></div>
         <div class="sparkles"></div>
       </div>
       <div class="opening-flash" aria-hidden="true"></div>
@@ -67,6 +58,8 @@
       <section class="intro-section" id="home" tabindex="-1">
         <div class="section-rule" aria-hidden="true">✦</div>
         <p class="intro-bismillah" data-copy="bismillah"></p>
+        <p class="intro-verse" data-copy="verse"></p>
+        <p class="intro-verse-source" data-copy="verseSource"></p>
         <p class="overline" data-copy="occasion"></p>
         <h2 class="intro-names"><span data-name="groom"></span><span aria-hidden="true">&amp;</span><span data-name="bride"></span></h2>
         <p class="intro-message" data-copy="invitationMessage"></p>
