@@ -15,8 +15,8 @@
 | `hall-facing-wide-original.png` و`hall-facing-wide.webp` | نسخة سطح مكتب سابقة محفوظة للمقارنة | توليد أصلي بأداة `image_gen`، ثم تحويل WebP تقني |
 | `social-preview-facing.jpg` | صورة مشاركة سابقة بلا نص | تحويل JPEG تقني من المشهد الأفقي السابق |
 | `thurayya-poster.jpg` | ملصق الباب النشط | صورة من أرشيف القالب الذي قدّمه مالكه |
-| `thurayya-entrance.mp4` | فيديو فتح الباب النشط، مدته 10 ثوانٍ | فيديو من أرشيف القالب الذي قدّمه مالكه |
-| `thurayya-floor.jpg` | خامة أرضية محفوظة، غير مستخدمة في الواجهة | صورة من أرشيف القالب الذي قدّمه مالكه |
+| `entrance.mp4` | فيديو فتح الباب النشط، مدته 10 ثوانٍ | الملف الذي أرسله المالك؛ مطابق بايتًا لفيديو أرشيف القالب |
+| `thurayya-floor.jpg` | خامة أرضية الختام | صورة من أرشيف القالب الذي قدّمه مالكه |
 | `thurayya-hall-tux-original.png` و`thurayya-hall-tux.webp` | القاعة النشطة للهاتف والعريس ببدلة سوداء | تعديل `image_gen` على `hero.jpg` من أرشيف المالك، ثم تحويل WebP تقني |
 | `thurayya-hall-tux-wide-original.png` و`thurayya-hall-tux-wide.webp` | نسخة أفقية أولى محفوظة للمقارنة | توليد أصلي مسترشد بصورة القاعة المعدّلة المرخّصة، ثم تحويل WebP تقني |
 | `thurayya-hall-tux-wide-v2-original.png` و`thurayya-hall-tux-wide-v2.webp` | القاعة النشطة لسطح المكتب، الزوجان أسفل المشهد | إعادة تكوين الصورة الأفقية الأولى بأداة `image_gen`، ثم تحويل WebP تقني |

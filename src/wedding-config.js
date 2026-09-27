@@ -19,7 +19,7 @@ export const weddingConfig = Object.freeze({
   },
   audioPath: 'assets/audio/nocturne-original.wav',
   coverPosterPath: 'new_assets/thurayya-poster.jpg',
-  entranceVideoPath: 'new_assets/thurayya-entrance.mp4',
+  entranceVideoPath: 'new_assets/entrance.mp4',
   socialPreviewPath: 'new_assets/thurayya-share-tux.jpg',
   copy: {
     pageTitle: 'دعوة زفاف محمد أديب طويل ورزان بطايحي',

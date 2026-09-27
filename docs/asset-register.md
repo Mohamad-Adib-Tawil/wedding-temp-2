@@ -5,7 +5,7 @@
 | الأصل | النوع | المصدر | الحالة والترخيص |
 | --- | --- | --- | --- |
 | `new_assets/thurayya-poster.jpg` | ملصق فيديو الباب | `templates/thurayya/assets/poster.jpg` داخل الأرشيف الذي قدّمه المالك | أصل من هلاهيل أذن مالكه بإعادة نشره هنا. |
-| `new_assets/thurayya-entrance.mp4` | فيديو افتتاح الباب؛ بلا كتابة مدمجة | `templates/thurayya/assets/entrance.mp4` داخل الأرشيف | أصل من هلاهيل أذن مالكه بإعادة نشره هنا. |
+| `new_assets/entrance.mp4` | فيديو افتتاح الباب؛ بلا كتابة مدمجة | الملف الذي أرسله المالك، مطابق بايتًا لـ`templates/thurayya/assets/entrance.mp4` داخل الأرشيف؛ SHA-256: `6c78d706176c01bfee6077530eb28615cfafab0710ff2ee4554b52ae72ea9af8` | أصل من هلاهيل أذن مالكه بإعادة نشره هنا. |
 | `new_assets/thurayya-floor.jpg` | خامة الأرضية العاكسة في ختام الصفحة | `templates/thurayya/assets/floor.jpg` داخل الأرشيف | أصل من هلاهيل أذن مالكه بإعادة نشره هنا؛ مستخدم في الواجهة. |
 | `new_assets/thurayya-hall-tux-original.png` و`thurayya-hall-tux.webp` | صورة قاعة عمودية؛ العريس ببدلة سوداء | تعديل توليدي لصورة `hero.jpg` التي قدّمها المالك؛ WebP تحويل للعرض | مشتق مرخّص من أصل هلاهيل، وصورة العرض النشطة للهاتف. |
 | `new_assets/thurayya-hall-tux-wide-original.png` و`thurayya-hall-tux-wide.webp` | صورة قاعة أفقية بنفس الهوية | توليد من الصورة المعدّلة المصرّح بها | مشتق مرخّص؛ نسخة أولى محفوظة للمقارنة. |

@@ -17,7 +17,7 @@ npm run build
 python3 -m http.server 4173 --directory dist
 ```
 
-افتح `http://localhost:4173/`. ملف `index.html` في جذر المستودع ناتج من البناء؛ تُحقن فيه وسوم المشاركة من ملف الإعدادات. عند تغيير الإعدادات شغّل `npm run build` ثم أضف `index.html` المُولّد إلى الالتزام. ينشر GitHub Pages جذر فرع `main` مباشرةً؛ لا يلزم اعتماد GitHub Actions.
+افتح `http://localhost:4173/`. يولّد البناء ملفي `index.html` و`index.template.html` في جذر المستودع مع JavaScript مضمّن، فتعمل المعاينة أيضًا عند فتح أي منهما مباشرةً عبر `file://`. مصدر HTML القابل للتعديل هو `scripts/page.template.html`. عند تغيير الإعدادات شغّل `npm run build` ثم أضف الملفين المُولّدين إلى الالتزام. ينشر GitHub Pages جذر فرع `main` مباشرةً؛ لا يلزم اعتماد GitHub Actions.
 
 ## الحقوق
 

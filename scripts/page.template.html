@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3d2b1d">
+  <meta name="description" content="%PAGE_DESCRIPTION%">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_AR">
+  <meta property="og:title" content="%PAGE_TITLE%">
+  <meta property="og:description" content="%PAGE_DESCRIPTION%">
+  <meta property="og:url" content="%SITE_URL%">
+  <meta property="og:image" content="%SOCIAL_IMAGE_URL%">
+  <meta property="og:image:width" content="1731">
+  <meta property="og:image:height" content="909">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>%PAGE_TITLE%</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/ArefRuqaa-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Amiri-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="src/thurayya-fonts.css">
+  <link rel="stylesheet" href="src/thurayya-source.css">
+  <link rel="stylesheet" href="src/site-controls.css">
+  <script type="module" src="src/main.js"></script>
+</head>
+<body class="is-locked">
+  <div class="cover" id="experience" data-stage="cover">
+    <video class="cover__vid" id="door-video" poster="%COVER_POSTER_URL%" muted playsinline preload="metadata"><source src="%ENTRANCE_VIDEO_URL%" type="video/mp4"></video>
+    <div class="cover__veil" aria-hidden="true"></div>
+    <div class="glints" id="cover-glints" aria-hidden="true"></div>
+    <div class="cover__top" id="cover-content">
+      <p class="cover__kicker" data-copy="occasion"></p>
+      <span class="cover__rule" aria-hidden="true"></span>
+      <p class="cover__names"><span data-name="groomDisplay"></span> <span aria-hidden="true">&amp;</span> <span data-name="brideDisplay"></span></p>
+    </div>
+    <div class="cover__ui">
+      <p class="cover__hint" data-copy="doorHint"></p>
+      <button id="open-invitation" class="cover__open" type="button"><span data-copy="open"></span><span class="cover__ring" aria-hidden="true"><b></b></span></button>
+    </div>
+    <button id="skip-intro" class="skip-intro" type="button" data-copy="skip" hidden></button>
+  </div>
+  <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" hidden></button>
+  <audio id="background-music" loop preload="none"></audio>
+  <main class="invite" id="wedding-content" inert aria-hidden="true">
+    <div class="crystal-dust" id="crystal-dust" aria-hidden="true"></div>
+    <section class="stage" id="home" tabindex="-1">
+      <div class="stage__photo" aria-hidden="true"></div>
+      <div class="stage__veil" aria-hidden="true"></div>
+      <div class="stage__inner">
+        <p class="stage__kicker sreveal" data-copy="occasion"></p>
+        <span class="stage__orn sreveal" aria-hidden="true">✦</span>
+        <h1 class="couple sreveal"><span class="couple__name" data-name="groomDisplay"></span><span class="couple__amp" aria-hidden="true">&amp;</span><span class="couple__name" data-name="brideDisplay"></span></h1>
+        <p class="stage__date sreveal" id="hero-date" hidden></p>
+        <p class="stage__sub sreveal" data-copy="heroLine"></p>
+      </div>
+      <div class="stage__floorfade" aria-hidden="true"></div>
+      <span class="scroll-cue sreveal" aria-hidden="true"><em>✦</em><span data-copy="scroll"></span><em>✦</em><b>↓</b></span>
+    </section>
+    <article class="hall">
+      <div class="hall__strands" id="hall-strands" aria-hidden="true"></div>
+      <section class="sec verse creveal" id="verse-section">
+        <p class="bismillah" data-copy="bismillah"></p><span class="lamp" aria-hidden="true"></span>
+        <p class="verse__text" data-copy="verse"></p><p class="verse__source" data-copy="verseSource"></p>
+      </section>
+      <div class="divider creveal" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      <section class="sec invitation creveal" aria-labelledby="invitation-title">
+        <h2 class="sec__title" id="invitation-title" data-copy="invitationTitle"></h2><p class="invitation__text" data-copy="invitationMessage"></p>
+      </section>
+      <div class="divider creveal" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+      <section id="countdown-section" class="sec count creveal" aria-labelledby="countdown-title" hidden>
+        <h2 class="sec__title" id="countdown-title" data-copy="countdownTitle"></h2>
+        <div id="countdown" class="countdown" aria-live="off"></div><p id="countdown-complete" class="count__arrived" data-copy="countdownComplete" hidden></p>
+      </section>
+      <section id="program-section" class="sec program creveal" aria-labelledby="program-title" hidden>
+        <h2 class="sec__title" id="program-title" data-copy="programTitle"></h2><ol id="program-list" class="sched"></ol>
+      </section>
+      <section id="venue-section" class="sec venue creveal" aria-labelledby="venue-title" hidden>
+        <h2 class="sec__title" id="venue-title" data-copy="venueTitle"></h2><p id="venue-name" class="venue__name"></p><p id="venue-address" class="venue__addr"></p>
+        <a id="map-link" class="venue__map" target="_blank" rel="noopener noreferrer" data-copy="map" hidden></a>
+      </section>
+      <section id="notes-section" class="sec notes creveal" aria-labelledby="notes-title" hidden>
+        <h2 class="sec__title" id="notes-title" data-copy="notesTitle"></h2><ul id="notes-list" class="notes__list"></ul>
+      </section>
+      <section id="calendar-section" class="sec calendar creveal" aria-labelledby="calendar-title" hidden>
+        <h2 class="sec__title" id="calendar-title" data-copy="calendarTitle"></h2><p id="event-date" class="calendar__date"></p><p id="event-time"></p>
+        <div class="calendar__actions"><a id="google-calendar" class="venue__map" target="_blank" rel="noopener noreferrer" data-copy="calendarGoogle"></a><button id="ics-calendar" class="contact__link" type="button" data-copy="calendarIcs"></button></div>
+      </section>
+      <section id="rsvp-section" class="sec contact creveal" aria-labelledby="rsvp-title" hidden>
+        <h2 class="sec__title" id="rsvp-title" data-copy="rsvpTitle"></h2><p id="rsvp-description" data-copy="rsvpDescription"></p><p id="rsvp-deadline" hidden></p>
+        <a id="rsvp-link" class="contact__link" target="_blank" rel="noopener noreferrer" data-copy="rsvpButton"></a>
+      </section>
+      <section class="sec closing creveal"><span class="lamp" aria-hidden="true"></span><p class="closing__note" data-copy="closing"></p><p class="closing__families"><span data-name="groom"></span> <span aria-hidden="true">&amp;</span> <span data-name="bride"></span></p></section>
+      <div class="hall__floor" aria-hidden="true"></div>
+    </article>
+    <footer class="site-footer"><div class="footer-actions"><button id="share-button" type="button" data-copy="share"></button><button id="copy-link" type="button" data-copy="copyLink"></button><button id="replay-invitation" type="button" data-copy="replay"></button></div></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

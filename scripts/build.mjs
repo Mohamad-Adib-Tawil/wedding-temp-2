@@ -20,7 +20,24 @@ const replacements = {
   '%COVER_POSTER_URL%': weddingConfig.coverPosterPath,
   '%ENTRANCE_VIDEO_URL%': weddingConfig.entranceVideoPath,
 };
-let html = await readFile(new URL('../index.template.html', import.meta.url), 'utf8');
+let html = await readFile(new URL('./page.template.html', import.meta.url), 'utf8');
 for (const [token, value] of Object.entries(replacements)) html = html.replaceAll(token, escapeHtml(value));
+const [configSource, calendarSource, experienceSource, mainSource] = await Promise.all([
+  readFile(new URL('../src/wedding-config.js', import.meta.url), 'utf8'),
+  readFile(new URL('../src/calendar.js', import.meta.url), 'utf8'),
+  readFile(new URL('../src/invitation-experience.js', import.meta.url), 'utf8'),
+  readFile(new URL('../src/main.js', import.meta.url), 'utf8'),
+]);
+const script = [
+  configSource.replace(/^export /gm, ''),
+  calendarSource.replace(/^export /gm, ''),
+  experienceSource.replace(/^export /gm, ''),
+  'const config = weddingConfig;',
+  mainSource.replace(/^import .*;\n/gm, ''),
+].join('\n').replace(/<\/script/gi, '<\\/script');
+html = html.replace('  <script type="module" src="src/main.js"></script>\n', '');
+html = html.replace('</body>', `<script>\n${script}\n</script>\n</body>`);
 await writeFile(join(fileURLToPath(destination), 'index.html'), html);
+await writeFile(join(fileURLToPath(destination), 'index.template.html'), html);
 await writeFile(new URL('../index.html', import.meta.url), html);
+await writeFile(new URL('../index.template.html', import.meta.url), html);
