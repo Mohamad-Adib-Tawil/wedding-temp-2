@@ -8,6 +8,7 @@ await rm(destination, { recursive: true, force: true });
 await mkdir(destination, { recursive: true });
 await cp(new URL('../src/', import.meta.url), new URL('./src/', destination), { recursive: true });
 await cp(new URL('../assets/', import.meta.url), new URL('./assets/', destination), { recursive: true });
+await cp(new URL('../new_assets/', import.meta.url), new URL('./new_assets/', destination), { recursive: true });
 
 const escapeHtml = (value) => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const siteUrl = weddingConfig.siteUrl.endsWith('/') ? weddingConfig.siteUrl : `${weddingConfig.siteUrl}/`;

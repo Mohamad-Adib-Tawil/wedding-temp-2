@@ -18,7 +18,7 @@ export const weddingConfig = Object.freeze({
     deadline: '',
   },
   audioPath: 'assets/audio/nocturne-original.wav',
-  socialPreviewPath: 'assets/images/social-preview.png',
+  socialPreviewPath: 'new_assets/social-preview.jpg',
   copy: {
     pageTitle: 'دعوة زفاف محمد أديب طويل ورزان بطايحي',
     pageDescription: 'دعوة زفاف محمد أديب طويل ورزان بطايحي. يسعدنا أن تشاركونا فرحتنا.',
