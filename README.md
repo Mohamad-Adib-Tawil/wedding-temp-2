@@ -15,7 +15,7 @@ npm run build
 python3 -m http.server 4173 --directory dist
 ```
 
-افتح `http://localhost:4173/`. النشر الآلي يتم من فرع `main` إلى GitHub Pages عبر `.github/workflows/pages.yml`.
+افتح `http://localhost:4173/`. ملف `index.html` في جذر المستودع ناتج من البناء؛ تُحقن فيه وسوم المشاركة من ملف الإعدادات. عند تغيير الإعدادات شغّل `npm run build` ثم أضف `index.html` المُولّد إلى الالتزام. ينشر GitHub Pages جذر فرع `main` مباشرةً؛ لا يلزم اعتماد GitHub Actions.
 
 ## الحقوق
 

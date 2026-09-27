@@ -17,6 +17,7 @@ const replacements = {
   '%SITE_URL%': siteUrl,
   '%SOCIAL_IMAGE_URL%': new URL(weddingConfig.socialPreviewPath, siteUrl).href,
 };
-let html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+let html = await readFile(new URL('../index.template.html', import.meta.url), 'utf8');
 for (const [token, value] of Object.entries(replacements)) html = html.replaceAll(token, escapeHtml(value));
 await writeFile(join(fileURLToPath(destination), 'index.html'), html);
+await writeFile(new URL('../index.html', import.meta.url), html);
