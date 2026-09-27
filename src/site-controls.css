@@ -1,0 +1,39 @@
+html{scroll-behavior:smooth}
+body.is-locked{overflow:hidden;height:100%}
+[hidden]{display:none!important}
+button,a{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid #f7df9d;outline-offset:4px}
+.cover__open{display:block;margin:auto;border:0;background:transparent;color:var(--cover-hint);font-size:.9rem;min-width:48px;min-height:90px;padding:0 12px}
+.cover__open .cover__ring{pointer-events:none}
+.cover__open:focus-visible{outline-offset:0}
+.cover.is-playing .cover__top{opacity:.15;transition:opacity .7s}
+.cover.is-flood::after{z-index:5}
+.cover__vid.is-live{opacity:1}
+.skip-intro{position:absolute;z-index:6;top:max(14px,env(safe-area-inset-top));left:16px;min-height:44px;padding:5px 15px;border:1px solid rgba(236,215,162,.7);border-radius:999px;background:rgba(35,25,18,.82);color:#fff7e7}
+.sound-toggle{position:fixed;z-index:60;bottom:max(16px,env(safe-area-inset-bottom));left:16px;min-height:46px;padding:7px 18px;border:1px solid #d5b47c;border-radius:999px;background:rgba(35,25,18,.9);color:#fff0d3;box-shadow:0 5px 20px rgba(0,0,0,.25)}
+.invite{visibility:hidden}
+.invite.visible{visibility:visible}
+.stage__photo{background-image:url("../new_assets/thurayya-hall-tux.webp")}
+.stage__date[hidden]{display:none}
+.verse__source{margin:8px auto 0;color:var(--gold-ink);font-size:.77rem}
+.calendar__date{font-family:var(--serif);font-size:1.3rem;color:var(--mocha)}
+.calendar__actions{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px}
+.calendar__actions .contact__link{cursor:pointer}
+.site-footer{position:relative;z-index:2;padding:18px 20px 35px;text-align:center;background:#ddcaad}
+.footer-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.footer-actions button{border:1px solid rgba(142,105,47,.42);border-radius:999px;padding:8px 13px;background:rgba(255,253,248,.55);color:var(--mocha);font-size:.8rem;min-height:44px}
+.toast{position:fixed;z-index:80;bottom:78px;left:50%;transform:translateX(-50%) translateY(10px);opacity:0;pointer-events:none;background:#271d16;color:#fff1d5;border:1px solid #b89560;border-radius:100px;padding:7px 20px;white-space:nowrap;transition:opacity .2s,transform .2s}
+.toast.is-visible{opacity:1;transform:translateX(-50%)}
+.countdown__unit{position:relative;min-width:0;padding:1rem .25rem .8rem;border:1px solid rgba(194,153,79,.34);border-radius:1.6rem 1.6rem .7rem .7rem;background:linear-gradient(180deg,rgba(255,253,248,.92),rgba(250,242,229,.7));box-shadow:0 10px 26px rgba(109,81,56,.1),inset 0 1px 0 rgba(255,255,255,.9)}
+.countdown__unit::before{content:"";position:absolute;bottom:100%;left:50%;width:1px;height:26px;background:linear-gradient(transparent,rgba(194,153,79,.55))}
+.countdown__unit strong{display:block;font-family:var(--serif);font-size:clamp(1.6rem,7.6vw,2.35rem);font-weight:400;color:var(--gold-ink)}
+.countdown__unit span{display:block;margin-top:.55rem;font-size:.76rem;color:var(--ink-soft)}
+.sched{list-style:none;padding:4px 0}
+.sched__row{list-style:none}
+.sched__row time{font-family:var(--serif);font-weight:700;color:var(--gold-ink)}
+.notes__list{padding:0}
+.notes__list li{padding:11px 0;border-bottom:1px solid rgba(194,153,79,.18)}
+.notes__list li:last-child{border:0}
+@media (min-width:900px){.stage__photo{background-image:url("../new_assets/thurayya-hall-tux-wide-v2.webp");background-position:center center}.cover{background-size:auto 100%;background-repeat:no-repeat;background-color:#241a12}.cover__vid{left:50%;right:auto;width:min(100%,56.25svh);transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cover__ring,.cover__ring b,.cover__hint,.stage__photo,.scroll-cue b,.glints i,.crystal-dust i,.strand{animation:none!important}.sreveal,.creveal{opacity:1;transform:none;transition:none}}

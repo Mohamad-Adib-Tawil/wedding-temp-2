@@ -6,7 +6,8 @@ function element() {
   const listeners = new Map();
   return {
     hidden: false, inert: false, dataset: {}, textContent: '', paused: true,
-    classList: { add() {}, remove() {} },
+    classList: { values: new Set(), add(...names) { names.forEach((name) => this.values.add(name)); }, remove(...names) { names.forEach((name) => this.values.delete(name)); }, contains(name) { return this.values.has(name); } },
+    style: { setProperty() {} }, append() {}, querySelectorAll() { return []; }, closest() { return null; },
     setAttribute() {}, focus() {},
     addEventListener(name, callback) { listeners.set(name, callback); },
     click() { listeners.get('click')?.(); },
@@ -16,12 +17,10 @@ function element() {
 
 function setup(reduced) {
   const selectors = Object.fromEntries([
-    '#experience', '#wedding-content', '#open-invitation', '.cover-content', '#hall-content',
-    '#skip-intro', '#continue-to-site', '#replay-invitation', '#sound-toggle',
+    '#experience', '#wedding-content', '#open-invitation', '#cover-glints', '#crystal-dust',
+    '#hall-strands', '#skip-intro', '#replay-invitation', '#sound-toggle',
     '#background-music', '#door-video', '#home',
   ].map((key) => [key, element()]));
-  const arch = element();
-  selectors['#experience'].querySelector = () => arch;
   let plays = 0;
   selectors['#background-music'].play = () => {
     plays += 1;
@@ -36,8 +35,11 @@ function setup(reduced) {
   selectors['#door-video'].pause = () => { selectors['#door-video'].paused = true; };
   globalThis.document = {
     querySelector: (selector) => selectors[selector],
+    querySelectorAll: () => [],
+    createElement: () => element(),
     body: { classList: { add() {}, remove() {} } },
   };
+  globalThis.IntersectionObserver = class { observe() {} unobserve() {} };
   globalThis.window = {
     matchMedia: () => ({ matches: reduced, addEventListener() {} }),
     setTimeout: () => 1,
@@ -64,17 +66,16 @@ test('normal opening starts audio only after the guest clicks', () => {
   assert.equal(app.plays, 1);
   assert.equal(app.selectors['#door-video'].paused, false);
   app.selectors['#door-video'].emit('ended');
-  assert.equal(app.selectors['#experience'].dataset.stage, 'hall');
-  app.selectors['#skip-intro'].click();
-  assert.equal(app.selectors['#experience'].hidden, true);
+  assert.equal(app.selectors['#wedding-content'].classList.contains('visible'), true);
+  assert.equal(app.selectors['#wedding-content'].inert, false);
   assert.equal(app.selectors['#door-video'].paused, true);
 });
 
-test('scrolling down from the hall reveals the invitation', () => {
+test('the hall remains the first scrollable section after the door', () => {
   const app = setup(false);
   app.selectors['#open-invitation'].click();
   app.selectors['#door-video'].emit('ended');
-  app.selectors['#experience'].emit('wheel', { deltaY: 50 });
-  assert.equal(app.selectors['#experience'].hidden, true);
   assert.equal(app.selectors['#wedding-content'].inert, false);
+  assert.equal(app.selectors['#home'].hidden, false);
+  assert.equal(app.selectors['#wedding-content'].classList.contains('visible'), true);
 });

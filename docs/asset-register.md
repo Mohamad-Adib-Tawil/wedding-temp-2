@@ -6,13 +6,14 @@
 | --- | --- | --- | --- |
 | `new_assets/thurayya-poster.jpg` | ملصق فيديو الباب | `templates/thurayya/assets/poster.jpg` داخل الأرشيف الذي قدّمه المالك | أصل من هلاهيل أذن مالكه بإعادة نشره هنا. |
 | `new_assets/thurayya-entrance.mp4` | فيديو افتتاح الباب؛ بلا كتابة مدمجة | `templates/thurayya/assets/entrance.mp4` داخل الأرشيف | أصل من هلاهيل أذن مالكه بإعادة نشره هنا. |
-| `new_assets/thurayya-floor.jpg` | خامة أرضية محفوظة ضمن الحزمة | `templates/thurayya/assets/floor.jpg` داخل الأرشيف | أصل من هلاهيل أذن مالكه بإعادة نشره هنا؛ غير مستخدم حاليًا في الواجهة. |
+| `new_assets/thurayya-floor.jpg` | خامة الأرضية العاكسة في ختام الصفحة | `templates/thurayya/assets/floor.jpg` داخل الأرشيف | أصل من هلاهيل أذن مالكه بإعادة نشره هنا؛ مستخدم في الواجهة. |
 | `new_assets/thurayya-hall-tux-original.png` و`thurayya-hall-tux.webp` | صورة قاعة عمودية؛ العريس ببدلة سوداء | تعديل توليدي لصورة `hero.jpg` التي قدّمها المالك؛ WebP تحويل للعرض | مشتق مرخّص من أصل هلاهيل، وصورة العرض النشطة للهاتف. |
 | `new_assets/thurayya-hall-tux-wide-original.png` و`thurayya-hall-tux-wide.webp` | صورة قاعة أفقية بنفس الهوية | توليد من الصورة المعدّلة المصرّح بها | مشتق مرخّص؛ نسخة أولى محفوظة للمقارنة. |
 | `new_assets/thurayya-hall-tux-wide-v2-original.png` و`thurayya-hall-tux-wide-v2.webp` | صورة قاعة أفقية والزوجان أسفل المشهد | إعادة تكوين مولّدة من النسخة الأفقية الأولى | مشتق مرخّص؛ صورة العرض النشطة لسطح المكتب. |
 | `new_assets/thurayya-share-tux-original.png` و`thurayya-share-tux.jpg` | صورة مشاركة بلا كتابة؛ العريس ببدلة سوداء | تعديل توليدي لصورة `share.jpg` التي قدّمها المالك؛ JPEG تحويل للعرض | مشتق مرخّص، وصورة المشاركة النشطة. |
 | `assets/chandelier.svg` | رسم ثريّا | رسمنا خصيصًا لهذا المشروع | أصل جديد. |
-| رسوم الباب والستائر القديمة واللمعات في `src/style.css` | رسوم CSS | صُممت لهذا المشروع | أصل جديد؛ معظمها محفوظ من النسخة السابقة وغير ظاهر حاليًا. |
+| `src/thurayya-source.css` | تنسيق القالب والستائر والفواصل والأنوار | `templates/thurayya/styles_v=7528b27e.css` داخل الأرشيف؛ عُدّلت مسارات الصور المحلية فقط | شيفرة قالب من هلاهيل أذن مالكه بإعادة نشرها هنا. |
+| `src/site-controls.css` | تنسيق عناصر التحكم والإضافات اللازمة للمشروع | كُتب لهذا المشروع | أصل جديد. |
 | `assets/favicon.svg` | أيقونة | رسمنا خصيصًا لهذا المشروع | أصل جديد. |
 | `assets/images/social-preview.png` | صورة مشاركة بلا أسماء أو نص شخصي | رُسمت لهذا المشروع | أصل جديد. |
 | `new_assets/cover-bride-original.png` و`cover-bride.webp` | عروس مجهولة من الخلف بخلفية شفافة | توليد `image_gen` لهذا المشروع؛ WebP تحويل للعرض | أصل جديد مولّد. |
@@ -28,4 +29,4 @@
 | `assets/fonts/ArefRuqaa-Regular.ttf` و`ArefRuqaa-Bold.ttf` | خط الأسماء والعناوين | [مستودع Google Fonts، عائلة Aref Ruqaa](https://github.com/google/fonts/tree/main/ofl/arefruqaa) | بديل مرخّص، SIL Open Font License 1.1. |
 | `assets/fonts/Tajawal-Regular.ttf` و`Tajawal-Medium.ttf` | خط واجهة الاستخدام | [مستودع Google Fonts، عائلة Tajawal](https://github.com/google/fonts/tree/main/ofl/tajawal) | بديل مرخّص، SIL Open Font License 1.1. |
 
-نسخ رخص الخطوط: `assets/fonts/OFL.txt` و`OFL-ArefRuqaa.txt` و`OFL-Tajawal.txt`. لا يُربط الموقع مباشرةً بخوادم هلاهيل. الموسيقى الأصلية للمشروع مستقلة؛ لم يكن في الأرشيف ملف صوت أو خط.
+نسخ رخص الخطوط: `assets/fonts/OFL.txt` و`OFL-ArefRuqaa.txt` و`OFL-Tajawal.txt`. لا يُربط الموقع مباشرةً بخوادم هلاهيل. الموسيقى الأصلية للمشروع مستقلة؛ لم يكن في الأرشيف ملف صوت أو خط. لا تُستخدم شيفرة `script_v=7528b27e.js` الأصلية لأن سلوك البيانات والصوت وRSVP أعيد تنفيذه في `src/invitation-experience.js` و`src/main.js`.

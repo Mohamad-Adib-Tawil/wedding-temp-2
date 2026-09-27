@@ -1,33 +1,55 @@
-/** Owns the opening timeline, replay, accessibility state, and opt-in audio. */
+/** Keeps the ballroom as the first scrollable scene after the door opens. */
 export function initExperience(config, showToast) {
-  const root = document.querySelector('#experience');
+  const cover = document.querySelector('#experience');
   const site = document.querySelector('#wedding-content');
-  const openButton = document.querySelector('#open-invitation');
-  const coverContent = document.querySelector('.cover-content');
-  const hallContent = document.querySelector('#hall-content');
-  const skipButton = document.querySelector('#skip-intro');
-  const continueButton = document.querySelector('#continue-to-site');
-  const replayButton = document.querySelector('#replay-invitation');
-  const soundButton = document.querySelector('#sound-toggle');
-  const audio = document.querySelector('#background-music');
   const doorVideo = document.querySelector('#door-video');
+  const audio = document.querySelector('#background-music');
+  const soundButton = document.querySelector('#sound-toggle');
+  const openButton = document.querySelector('#open-invitation');
+  const skipButton = document.querySelector('#skip-intro');
+  const replayButton = document.querySelector('#replay-invitation');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const timers = new Set();
   let started = false;
-  let touchStartY = null;
+  let hallShown = false;
 
   if (config.audioPath) audio.src = config.audioPath;
 
+  function addLights(container, count, sideOnly = false) {
+    if (reduceMotion.matches) return;
+    for (let index = 0; index < count; index += 1) {
+      const light = document.createElement('i');
+      const fraction = ((index * 67 + 23) % 101) / 100;
+      const x = sideOnly ? (index % 2 ? 4 + fraction * 16 : 80 + fraction * 16) : fraction * 100;
+      light.style.left = `${x}%`;
+      light.style.top = `${(index * 43 + 17) % 96}%`;
+      light.style.setProperty('--spark-size', `${2 + index % 3}px`);
+      light.style.setProperty('--spark-delay', `${(index % 7) * -.43}s`);
+      container.append(light);
+    }
+  }
+
+  addLights(document.querySelector('#cover-glints'), 16);
+  addLights(document.querySelector('#crystal-dust'), 18, true);
+  const strands = document.querySelector('#hall-strands');
+  if (!reduceMotion.matches) {
+    for (let index = 0; index < 12; index += 1) {
+      const strand = document.createElement('i');
+      strand.className = 'strand';
+      strand.style.left = `${index < 6 ? 3 + index * 3 : 81 + (index - 6) * 3}%`;
+      strand.style.height = `${180 + (index * 53) % 190}px`;
+      strand.style.setProperty('--glowDelay', `${index * -.47}s`);
+      strands.append(strand);
+    }
+  }
+
   function schedule(callback, delay) {
-    const timer = window.setTimeout(() => {
-      timers.delete(timer);
-      callback();
-    }, delay);
+    const timer = window.setTimeout(() => { timers.delete(timer); callback(); }, delay);
     timers.add(timer);
   }
 
-  function clearTimeline() {
-    timers.forEach((timer) => window.clearTimeout(timer));
+  function clearTimers() {
+    timers.forEach(window.clearTimeout);
     timers.clear();
   }
 
@@ -46,106 +68,98 @@ export function initExperience(config, showToast) {
     });
   }
 
-  function revealSite() {
-    clearTimeline();
-    doorVideo.pause();
-    root.hidden = true;
-    site.inert = false;
-    site.setAttribute('aria-hidden', 'false');
-    document.body.classList.remove('is-locked');
-    document.querySelector('#home').focus({ preventScroll: true });
+  function revealSections() {
+    if (reduceMotion.matches) {
+      document.querySelectorAll('.sreveal,.creveal').forEach((node) => node.classList.add('is-in', 'is-visible'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .1, rootMargin: '0px 0px -25px 0px' });
+    document.querySelectorAll('.creveal').forEach((node) => observer.observe(node));
   }
 
   function showHall() {
-    if (root.hidden || root.dataset.stage !== 'opening') return;
-    root.dataset.stage = 'hall';
-    root.dataset.flash = 'on';
-    hallContent.hidden = false;
-    schedule(() => { root.dataset.reveal = '1'; }, 450);
-    schedule(() => { root.dataset.reveal = '2'; }, 1250);
-    schedule(() => { root.dataset.reveal = '3'; }, 2100);
-    schedule(revealSite, 7800);
+    if (!started || hallShown) return;
+    hallShown = true;
+    clearTimers();
+    doorVideo.pause();
+    site.classList.add('visible');
+    site.inert = false;
+    site.setAttribute('aria-hidden', 'false');
+    document.body.classList.remove('is-locked');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    const stage = document.querySelector('#home');
+    stage.focus({ preventScroll: true });
+    const stageItems = [...stage.querySelectorAll('.sreveal')];
+    stageItems.forEach((item, index) => schedule(() => item.classList.add('is-in'), reduceMotion.matches ? 0 : 250 + index * 470));
+    revealSections();
+    cover.classList.add('is-open');
+    if (reduceMotion.matches) cover.hidden = true;
+    else schedule(() => { cover.hidden = true; }, 1200);
   }
 
   function startOpening() {
     if (started) return;
     started = true;
-    openButton.hidden = true;
-    coverContent.inert = true;
     skipButton.hidden = false;
     if (!reduceMotion.matches) playAudio();
     updateSoundButton();
-    if (reduceMotion.matches) {
-      revealSite();
-      return;
-    }
-    root.dataset.stage = 'opening';
+    if (reduceMotion.matches) { showHall(); return; }
+    cover.classList.add('is-playing');
     doorVideo.currentTime = 0;
     doorVideo.play().catch(showHall);
     schedule(showHall, 16_000);
   }
 
   function replay() {
-    clearTimeline();
-    touchStartY = null;
+    clearTimers();
     doorVideo.pause();
     doorVideo.currentTime = 0;
     audio.pause();
     audio.currentTime = 0;
     started = false;
+    hallShown = false;
     updateSoundButton();
     window.scrollTo({ top: 0, behavior: 'instant' });
     site.inert = true;
     site.setAttribute('aria-hidden', 'true');
+    site.classList.remove('visible');
     document.body.classList.add('is-locked');
-    root.hidden = false;
-    root.dataset.stage = 'cover';
-    root.dataset.flash = 'off';
-    root.dataset.video = 'poster';
-    root.dataset.reveal = '0';
-    coverContent.inert = false;
-    hallContent.hidden = true;
-    openButton.hidden = false;
+    cover.hidden = false;
+    cover.classList.remove('is-playing', 'is-flood', 'is-open');
+    doorVideo.classList.remove('is-live');
+    document.querySelectorAll('.sreveal').forEach((node) => node.classList.remove('is-in'));
     skipButton.hidden = true;
     openButton.focus();
   }
 
   openButton.addEventListener('click', startOpening);
-  root.querySelector('.cover-scene').addEventListener('click', startOpening);
-  coverContent.addEventListener('click', startOpening);
-  doorVideo.addEventListener('playing', () => { root.dataset.video = 'playing'; });
+  cover.addEventListener('click', (event) => {
+    if (event.target.closest('#skip-intro,#open-invitation')) return;
+    startOpening();
+  });
+  doorVideo.addEventListener('playing', () => doorVideo.classList.add('is-live'));
   doorVideo.addEventListener('timeupdate', () => {
-    if (root.dataset.stage === 'opening' && doorVideo.currentTime >= 8.85) root.dataset.flash = 'on';
+    if (doorVideo.currentTime >= 8.85) cover.classList.add('is-flood');
   });
   doorVideo.addEventListener('ended', showHall);
   doorVideo.addEventListener('error', showHall);
-  root.addEventListener('wheel', (event) => {
-    if (root.dataset.stage === 'hall' && event.deltaY > 12) revealSite();
-  }, { passive: true });
-  root.addEventListener('touchstart', (event) => {
-    if (root.dataset.stage === 'hall') touchStartY = event.touches[0]?.clientY ?? null;
-  }, { passive: true });
-  root.addEventListener('touchend', (event) => {
-    if (root.dataset.stage !== 'hall' || touchStartY === null) return;
-    const distance = touchStartY - (event.changedTouches[0]?.clientY ?? touchStartY);
-    touchStartY = null;
-    if (distance > 45) revealSite();
-  }, { passive: true });
-  skipButton.addEventListener('click', revealSite);
-  continueButton.addEventListener('click', revealSite);
+  skipButton.addEventListener('click', showHall);
   replayButton.addEventListener('click', replay);
   soundButton.addEventListener('click', () => {
     if (audio.paused) playAudio();
-    else {
-      audio.pause();
-      updateSoundButton();
-    }
+    else { audio.pause(); updateSoundButton(); }
   });
   reduceMotion.addEventListener('change', () => {
     if (!reduceMotion.matches) return;
     audio.pause();
     doorVideo.pause();
     updateSoundButton();
-    if (started && !root.hidden) revealSite();
+    if (started && !cover.hidden) showHall();
   });
 }

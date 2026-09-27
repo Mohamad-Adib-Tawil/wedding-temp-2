@@ -1,0 +1,728 @@
+/* ============================================================
+   قالب «ثريّا» (thurayya)
+   الهوية مأخوذة من صورة القاعة نفسها: ستائر شامبانية مسدلة،
+   خيوط ضوء متساقطة كالثريّات، ورد خافت عند الأطراف، وأرضية عاكسة.
+   ============================================================ */
+
+:root{
+  --umber:#3d2b1d;        /* أعمق ظلّ بطيّات الستارة */
+  --mocha:#6d5138;
+  --taupe:#a98a6c;
+  --sand:#d8c3a5;
+  --champ:#ecdcc4;        /* الستارة حيث يقع الضوء */
+  --ivory:#faf5eb;
+  --gold:#c2994f;
+  --gold-hi:#ecd7a2;      /* خيوط الأنوار */
+  --gold-ink:#8e692f;     /* ذهب مادّي للحبر — من شريط البشت بالصورة؛ --gold لونُ نورٍ لا حبر (تباينه ١٫٨٩:١) */
+  --blush:#d7b0a8;        /* الورد الوردي بالأطراف */
+  --ink:#4a3728;
+  --ink-soft:#83705c;
+  /* نصوص الدخولية (الباب) — متغيّرات كي يبدّلها زبون VIP من «ألوان القالب»
+     بلا لمس القالب. القيم نفسها الأصلية حرفياً، فمظهر ثريّا لباقي الزبائن ثابت. */
+  --cover-name:#fff7e7;    /* الأسماء على الباب */
+  --cover-kicker:#f3e6cd;  /* سطر «دعوة زفاف» */
+  --cover-hint:#efe1c8;    /* سطر «المسوا الباب…» */
+  --disp:"Aref Ruqaa", serif;
+  --serif:"Amiri", serif;
+  --body:"Tajawal", system-ui, sans-serif;
+  --bars:0px;             /* أشرطة المنصّة السفلية — يقيسها السكربت */
+  --stage-h:100svh;       /* ارتفاع الواجهة الفعلي — يقيسه السكربت */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--champ);
+  color:var(--ink);
+  font-family:var(--body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.locked{overflow:hidden;height:100%}
+img,video{max-width:100%}
+
+/* ============================================================
+   الدخولية — الباب
+   ============================================================ */
+.cover{
+  position:fixed; inset:0; z-index:50;
+  /* ملصق الفيديو خلفيةً للباب: بين الضغطة وأول إطار (آيفون لا يحمّل الفيديو قبل اللمسة)
+     كان العنصر شفّافاً فوق البنّي الداكن فتومض الشاشة معتمة لجزء من الثانية */
+  background:#241a12 url("../new_assets/thurayya-poster.jpg") center/cover no-repeat;
+  cursor:pointer; overflow:hidden;
+  transition:opacity 1.15s ease, visibility 1.15s;
+}
+/* شفّاف حتى يُعرض أول إطار فعلاً (is-live): آيفون يرسم طبقة الفيديو سوداء بين play() وأول
+   إطار، وملصق الباب (خلفية .cover) هو الإطار الأول نفسه فلا يُرى انتقال */
+.cover__vid{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  opacity:0; transition:opacity .35s ease;
+}
+.cover__vid.is-live{opacity:1}
+/* حجاب دافئ: يعتم الأطراف ويترك قلب الصورة (الباب) صافياً */
+.cover__veil{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(132% 82% at 50% 40%, transparent 32%, rgba(28,18,10,.34) 70%, rgba(18,12,6,.70) 100%),
+    linear-gradient(180deg,
+      rgba(23,15,8,0) 0%, rgba(23,15,8,0) 34%,
+      rgba(23,15,8,.16) 50%, rgba(22,14,8,.28) 68%,
+      rgba(20,13,7,.42) 82%, rgba(17,11,6,.54) 92%, rgba(15,10,5,.62) 100%);
+}
+/* الأسماء بأعلى الغلاف: هناك الباب داكن فتُقرأ بلا أي حاجب. وأسفلُ الكادر
+   ذيلُ الدانتيل — يُترك مضاءً، والتلميح يعتمد على ظلّه لا على تعتيم الكادر.
+   وتعتيمُ التاج بطبقةٍ تخصّه: الحجاب يبهت عند is-playing فكان يبهت معه. */
+.cover__top{
+  position:absolute; inset:0 0 auto 0; z-index:3;
+  padding:calc(46px + env(safe-area-inset-top)) 22px 0;
+  text-align:center;
+}
+.cover__top::before{
+  content:""; position:absolute; inset:0 0 auto 0; z-index:-1;
+  height:clamp(190px, 34vh, 320px); pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(24,16,9,.60) 0%, rgba(24,16,9,.22) 53%, rgba(24,16,9,.04) 88%, rgba(24,16,9,0) 100%);
+}
+.cover__kicker{
+  margin:0 0 9px;
+  font-size:.82rem; font-weight:500; word-spacing:.4em;
+  color:var(--cover-kicker);
+  text-shadow:0 1px 3px rgba(16,10,4,.9), 0 2px 12px rgba(18,11,5,.75);
+}
+.cover__rule{
+  display:block; width:132px; height:1px; margin:0 auto 14px;
+  background:linear-gradient(90deg, transparent, rgba(236,215,162,.7), transparent);
+}
+.cover__ui{
+  position:absolute; inset:auto 0 0 0;
+  padding:0 26px calc(52px + var(--bars) + env(safe-area-inset-bottom));
+  text-align:center; z-index:2;
+  transition:opacity .55s ease, transform .55s ease;
+}
+.cover__names{
+  /* inline-block + nowrap: بلا هذين يلتفّ النص بدل أن يفيض، فلا يقيس
+     الحارس شيئاً (scrollWidth لعنصر block لا يتجاوز أباه أبداً). */
+  display:inline-block; white-space:nowrap; max-width:100%;
+  margin:0; -webkit-text-stroke:.4px rgba(216,178,108,.38);
+  font-family:var(--disp); font-weight:700;
+  /* ⚠️ لا letter-spacing مع «عرف رقعة» — يُعطّل الروابط الإلزامية فتسقط
+     ميم «محمد» (٨٥٫٦ ← ٧١ بكسل: النصّ يضيق لأن حرفاً ذهب). */
+  font-size:clamp(2.5rem, 11.4vw, 4.2rem);
+  line-height:1.14;
+  color:var(--cover-name);
+  text-shadow:0 1px 2px rgba(16,10,4,.9), 0 2px 8px rgba(18,11,5,.85), 0 6px 26px rgba(18,11,5,.75), 0 0 40px rgba(236,215,162,.28);
+}
+/* ⚠️ نصّ فوق فيديو متغيّر السطوع: هالة تتلاشى داخل الصندوق قبل حافته،
+   فلا تظهر حوافّ مستطيلة ولا يذوب النص حين يغمر الضوءُ المشهد. */
+.cover__hint{
+  margin:0 0 26px;
+  font-size:.95rem; font-weight:400;
+  color:var(--cover-hint);
+  text-shadow:0 1px 3px rgba(16,10,4,.95), 0 2px 12px rgba(18,11,5,.9);
+  animation:hintPulse 3.4s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.82}50%{opacity:1}}
+
+/* حلقة ضوء نابضة — دعوة للّمس */
+/* قنديل صغير متدلٍّ من سلك، يتأرجح ويتنفّس — صدى ثريّات القاعة */
+.cover__ring{
+  display:block; width:2px; height:64px; margin:0 auto;
+  position:relative; transform-origin:50% 0;
+  background:linear-gradient(180deg, transparent, rgba(236,215,162,.5) 55%, rgba(236,215,162,.72));
+  animation:pendSway 4.6s ease-in-out infinite;
+}
+.cover__ring b{
+  position:absolute; inset:auto 50% -13px 50%;
+  width:15px; height:19px; margin-inline-start:-7.5px;
+  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  background:radial-gradient(circle at 42% 32%, #fffaec 0%, var(--gold-hi) 46%, var(--gold) 100%);
+  box-shadow:0 0 16px rgba(236,215,162,.85), 0 0 38px rgba(236,215,162,.45);
+  animation:pendGlow 2.8s ease-in-out infinite;
+}
+@keyframes pendSway{
+  0%,100%{transform:rotate(-3.2deg)}
+  50%{transform:rotate(3.2deg)}
+}
+/* ============================================================
+   اليافطة المعلّقة — «دعوة» منقوشة على نحاسٍ متعتّق تتدلّى تحت الأسماء
+   وتتمايل بإيقاع القنديل نفسه (pendSway) فتُقرأ معلّقةً لا مطبوعة.
+
+   ⚠️ موضعها **داخل** كتلة الأسماء لا بإحداثيّ مطلق: العروس تقف وسط الكادر
+   تماماً، وأيّ top محسوب بالنسبة يسقط على رأسها بشاشةٍ ما. بالتدفّق تنزل
+   دائماً تحت آخر سطر وفوقها — بلا رقمٍ سحريّ.
+   ⚠️ `display:flex` يغلب `[hidden]` بتنسيق المتصفح، فبلا السطر التالي تظهر
+   اليافطة لكل زبائن ثريّا. لا تحذفه.
+   ============================================================ */
+.plaque{
+  position:relative; margin:10px auto 0; width:max-content;
+  display:flex; flex-direction:column; align-items:center;
+  transform-origin:50% 0;
+  animation:pendSway 4.6s ease-in-out infinite;
+  transition:opacity .55s ease;
+}
+.plaque[hidden]{display:none}
+.plaque__cord{
+  display:block; width:1.5px; height:26px;
+  background:linear-gradient(180deg, rgba(236,215,162,.2), rgba(236,215,162,.66));
+}
+.plaque__board{
+  display:block; position:relative;
+  padding:6px 20px 8px; border-radius:4px;
+  background:linear-gradient(157deg, #e8d3a4 0%, #cdae74 40%, #b8934f 72%, #dcc189 100%);
+  box-shadow:
+    0 5px 14px rgba(12,7,3,.5),
+    inset 0 1px 0 rgba(255,248,228,.5),
+    inset 0 -1px 0 rgba(78,54,20,.42);
+}
+/* حافّة داخلية محفورة — تعطيها سماكةً بلا صورة */
+.plaque__board::before{
+  content:""; position:absolute; inset:2.5px;
+  border:1px solid rgba(86,60,22,.3); border-radius:2px; pointer-events:none;
+}
+.plaque__board b{
+  display:block; font-family:var(--disp); font-weight:700;
+  font-size:1.06rem; line-height:1.45; color:var(--umber);
+  /* نقشٌ غائر: ضوءٌ تحت الحرف وظلٌّ فوقه */
+  text-shadow:0 1px 0 rgba(255,246,222,.5), 0 -1px 0 rgba(66,45,16,.25);
+}
+/* مع انفتاح الباب تنسحب — يافطةٌ معلّقة أمام بابٍ ينفتح تبدو معلّقة بالهواء */
+.cover.is-playing .plaque{opacity:0; pointer-events:none}
+
+@keyframes pendGlow{
+  0%,100%{box-shadow:0 0 12px rgba(236,215,162,.6), 0 0 26px rgba(236,215,162,.3)}
+  50%{box-shadow:0 0 22px rgba(236,215,162,.95), 0 0 52px rgba(236,215,162,.55)}
+}
+
+/* أثر اللمسة */
+.cover__taps{position:absolute; inset:0; pointer-events:none; z-index:3}
+.tapring{
+  position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px;
+  border-radius:50%; border:1px solid rgba(246,232,198,.8);
+  box-shadow:0 0 14px rgba(236,215,162,.5);
+  animation:tapOut 1s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes tapOut{to{transform:scale(4.6); opacity:0; border-color:rgba(246,232,198,0)}}
+
+.cover.is-playing{cursor:default}
+.cover.is-playing .cover__ui{opacity:0; transform:translateY(12px); pointer-events:none}
+/* عند فتح الباب يبهت الحجاب فيغمر ضوءُ الداخل الشاشة */
+.cover.is-playing .cover__veil{opacity:.45; transition:opacity 2.6s ease 3.4s}
+/* لحظة العبور: الضوء يبتلع الشاشة ثم تظهر الدعوة من داخله — بدل ذوبانٍ
+   مزدوج يُقرأ «انتهى مقطع فيديو» لا «دخلتُ من الباب».
+   z-index:4 يعلو .cover__top (٣) فيبتلع أسماء الغلاف أيضاً — مقصود:
+   تسليمٌ من أسماء الغلاف إلى أسماء الواجهة. */
+.cover::after{
+  content:""; position:absolute; inset:0; z-index:4; pointer-events:none; opacity:0;
+  background:
+    radial-gradient(62% 42% at 54% 32%, #fffdf6 0%, rgba(255,252,242,.97) 40%, rgba(248,239,220,.93) 100%),
+    linear-gradient(180deg, #f8efdc, var(--champ));
+}
+.cover.is-flood::after{opacity:1; transition:opacity 1.15s cubic-bezier(.4,0,.2,1)}
+.cover.is-flood .cover__vid{filter:brightness(1.22); transition:filter 1.15s ease}
+.cover.is-open{opacity:0; visibility:hidden; pointer-events:none}
+
+/* ============================================================
+   الدعوة
+   ============================================================ */
+.invite{opacity:0; transition:opacity 1s ease; padding-bottom:var(--bars)}
+.invite.visible{opacity:1}
+
+/* ذرّات ضوء طافية بالهواء */
+.fx{position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden}
+/* ✦ اللمعان: نقاط ضوء ثابتة تتنفّس مكانها — لا تتساقط.
+   على الغلاف تلمع، وداخل الدعوة تلمع وتطفو طفواً خفيفاً. */
+.glints, .crystal-dust{
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+}
+.glints{z-index:2; transition:opacity .5s ease}
+.cover.is-playing .glints{opacity:0}
+.crystal-dust{position:fixed; z-index:1}
+.glints i, .crystal-dust i{
+  position:absolute;
+  width:var(--spark-size, 3px); height:var(--spark-size, 3px);
+  border-radius:50%;
+  background:#fff4d2;
+  box-shadow:0 0 7px #f0d49c, 0 0 16px rgba(240,212,156,.5);
+  animation:glint var(--spark-duration, 3.6s) ease-in-out infinite;
+  animation-delay:var(--spark-delay, 0s);
+}
+.crystal-dust i{animation-name:crystalFloat}
+@keyframes glint{
+  0%,100%{opacity:.08; transform:scale(.55)}
+  50%{opacity:.95; transform:scale(1.4)}
+}
+@keyframes crystalFloat{
+  0%,100%{opacity:.07; transform:translateY(7px) scale(.6)}
+  50%{opacity:.72; transform:translateY(-9px) scale(1.18)}
+}
+
+/* ===== الواجهة ===== */
+/* عمودٌ مرن: كتلة النصّ أعلاه والسطر يُدفع للقاع بـmargin-top:auto.
+   الوضع المطلق كان يضعه بمكانٍ ثابت فيتراكب مع النصّ على الشاشات القصيرة
+   (٣٢٠×٥٦٨ بنصّ زبونٍ طويل: النصّ ينتهي عند ٣٧٩ والسطر يبدأ عند ٣٥٧).
+   بالتدفّق يستحيل التراكب مهما طال النصّ أو قصرت الشاشة. */
+.stage{
+  position:relative; min-height:100svh;
+  display:flex; flex-direction:column; align-items:center;
+  overflow:hidden;
+}
+.stage__photo{
+  position:absolute; inset:0;
+  background-image:url("../new_assets/thurayya-hall-tux.webp");
+  background-size:cover;
+  background-position:50% 42%;
+  transform:scale(1.02);
+  animation:stageDrift 26s ease-in-out infinite alternate;
+}
+/* صورة القالب مضبوطة على 42% لأن ستائرها بالأعلى. أمّا الصورة المرفوعة فقد
+   قصّها الزبون بنفسه ٩:١٦، فتُعرض بمركزها كما اختارها لا كما يناسب صورتنا. */
+.stage__photo.is-custom{background-position:50% 50%}
+@keyframes stageDrift{from{transform:scale(1.02) translateY(0)}to{transform:scale(1.08) translateY(-10px)}}
+/* الصورة ساطعة بأعلاها (ستائر وأنوار) — الحجاب يُنزل السطوع تحت النص فقط */
+.stage__veil{
+  position:absolute; inset:0;
+  /* الحماية تتركّز تحت النصّ لا على الكادر كلّه: اسم القالب من خيوط
+     الأنوار، والتعتيم العريض كان ينزل بسطوعها من ١٣٨ إلى ٦٠. */
+  background:
+    radial-gradient(78% 47% at 50% 16%, rgba(46,29,15,.66) 0%, rgba(46,29,15,.34) 52%, transparent 80%),
+    linear-gradient(180deg, rgba(52,34,19,.30) 0%, rgba(52,34,19,.20) 18%, rgba(52,34,19,.10) 32%, rgba(52,34,19,.03) 44%, transparent 56%),
+    linear-gradient(0deg, var(--champ) 0%, rgba(236,220,196,.55) 4%, transparent 15%);
+}
+.stage__inner{
+  position:relative; z-index:2;
+  width:100%; max-width:560px;
+  padding:calc(40px + env(safe-area-inset-top)) 20px 0;
+  text-align:center;
+}
+.stage__kicker{
+  display:inline-block;
+  margin:0 0 10px;
+  font-family:var(--body); font-size:.9rem; font-weight:500;
+  word-spacing:.36em; color:#f6ecd8;
+  text-shadow:0 1px 3px rgba(22,14,6,.9), 0 2px 12px rgba(24,15,7,.7);
+}
+.stage__orn{
+  display:block; margin:2px auto 8px;
+  font-size:1rem; color:var(--gold-hi);
+  text-shadow:0 0 14px rgba(236,215,162,.7), 0 2px 6px rgba(24,15,7,.8);
+}
+.couple{
+  display:grid; justify-items:center;
+  margin:0 0 14px;
+  font-family:var(--disp); font-weight:700;
+  font-size:clamp(3rem, 13.4vw, 5rem);
+  line-height:1.14; color:#fff8e9;
+  text-shadow:0 2px 8px rgba(22,13,6,.85), 0 4px 24px rgba(22,13,6,.7), 0 0 46px rgba(236,215,162,.26);
+}
+/* هامش سالب طفيف يقارب السطرين فيُقرآن اسماً واحداً لا سطرين منفصلين.
+   والشعرة الذهبية بـtext-stroke: التقنية الوحيدة التي تُذهّب النصّ العربي
+   بلا خطر — لا تباعدَ يفكّ الوصل ولا background-clip يكسر التشكيل.
+   على الاسم لا على .couple كي لا ترثها العلامة. */
+.couple__name{
+  display:block; max-width:92vw; margin:-.06em 0 0;
+  -webkit-text-stroke:.5px rgba(216,178,108,.42);
+}
+.couple__amp{
+  display:block; margin:.22em 0 .08em;
+  /* ⚠️ بلا italic: أميري المائل يستبدل «&» بصيغة swash مزخرفة تُقرأ
+     حرفاً مشوّهاً. الطراز العادي يعطي علامةً كلاسيكية أنيقة. */
+  font-family:var(--serif);
+  font-size:.5em; color:var(--gold-hi);
+  text-shadow:0 1px 3px rgba(20,12,5,.9), 0 0 20px rgba(236,215,162,.7);
+}
+.stage__date{
+  display:inline-block;
+  margin:0 0 10px; padding:8px 26px;
+  font-family:var(--serif); font-size:1.03rem; color:#f8efdd;
+  border-top:1px solid rgba(236,215,162,.4);
+  border-bottom:1px solid rgba(236,215,162,.4);
+  text-shadow:0 1px 3px rgba(22,14,6,.9), 0 2px 12px rgba(24,15,7,.66);
+}
+.stage__sub{
+  display:inline-block;
+  margin:0 auto; max-width:34ch;
+  font-size:.97rem; line-height:1.95; color:#f0e3cb;
+  text-shadow:0 1px 3px rgba(22,14,6,.88), 0 2px 12px rgba(24,15,7,.64);
+}
+/* ⚠️ مثبّت أسفل الواجهة لا آخرَ كتلة النصّ: هناك كان يقع عند ٣٩٣-٤٤٧ بينما
+   رأس العريس يبدأ عند ٤٤٠ (مقيسٌ على الصورة) — فالسهم يهبط على الوجه.
+   وأسفلُ الكادر أرضيةٌ وذيلُ فستان، فلا وجه يُحجب مهما طال نصّ الزبون. */
+.scroll-cue{
+  position:relative; z-index:3;
+  margin-top:auto;                              /* يدفعه للقاع بلا تراكب */
+  margin-bottom:calc(14px + var(--bars));
+  width:100%; display:block; padding:0 20px; text-align:center;
+  font-size:.78rem; word-spacing:.28em; color:#f6ecd8;
+  text-shadow:0 1px 3px rgba(16,10,4,.95), 0 2px 10px rgba(18,11,5,.9), 0 0 24px rgba(18,11,5,.7);
+}
+/* تدرّج بعرض الشاشة يتلاشى صعوداً — يعيد التباين فوق الفستان الأبيض بلا صندوق */
+.stage__floorfade{
+  position:absolute; inset:auto 0 0 0; height:calc(190px + var(--bars)); z-index:2;
+  pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(38,24,13,0) 0%, rgba(38,24,13,.10) 34%, rgba(38,24,13,.26) 62%, rgba(38,24,13,.42) 100%);
+}
+.scroll-cue em{font-style:normal; margin:0 8px; color:var(--gold-hi); opacity:.9}
+.scroll-cue b{display:block; margin-top:6px; font-weight:400; animation:cueBob 2.2s ease-in-out infinite}
+@keyframes cueBob{0%,100%{transform:translateY(0); opacity:.55}50%{transform:translateY(6px); opacity:1}}
+
+/* ظهور عناصر الواجهة */
+.sreveal{
+  opacity:0; transform:translateY(-20px);
+  transition:opacity .85s ease, transform 1s cubic-bezier(.22,1.15,.36,1);
+}
+.sreveal.is-in{opacity:1; transform:none}
+
+/* ============================================================
+   القاعة — ستائر وخيوط ضوء
+   ============================================================ */
+/* الستائر على `main` كلّه لا على `.hall` وحدها: المنصّة تحقن التقويم وتأكيد
+   الحضور **بعد** `</article>` وقبل `</main>`، فلو بقيت الخلفية داخل `.hall`
+   جلست تلك الأقسام على لونٍ مسطّح منفصلٍ عن القاعة. */
+/* بلا خطوط عمودية: أي `repeating-linear-gradient` هنا يُقرأ شعيراتٍ مزعجة
+   على الشاشة مهما خفّ. الجوّ يجيء من التدرّج ووهجٍ ناعم بالأعلى وحدهما. */
+.invite{
+  /* الوهج يُرسم من سقف القاعة لا من رأس الصفحة (كان خلف الصورة)، والتدرّج
+     يبدأ بعد الواجهة بالبكسل فلا يقع خطٌّ أفقي عند حافّتها مهما طال النصّ. */
+  background:
+    radial-gradient(150% 480px at 50% calc(var(--stage-h) + 300px),
+      rgba(255,250,238,.40) 0%, transparent 62%),
+    linear-gradient(180deg,
+      var(--champ) 0px,
+      var(--champ) calc(var(--stage-h) + 40px),
+      #f2e5d0 calc(var(--stage-h) + 340px),
+      #ecdcc4 62%,
+      #e6d5ba 100%);
+}
+.hall{position:relative; z-index:2; padding:8px 0 0}
+/* خيوط الأنوار المتساقطة على جانبَي القاعة */
+.hall__strands{position:absolute; inset:0; overflow:hidden; pointer-events:none}
+.strand{
+  position:absolute; top:0; width:15px;
+  background-image:
+    radial-gradient(circle, rgba(255,250,235,.95) 0 1px,   transparent 1.6px),
+    radial-gradient(circle, rgba(255,248,230,.68) 0 .85px, transparent 1.4px),
+    radial-gradient(circle, rgba(255,248,230,.50) 0 .75px, transparent 1.3px);
+  background-size:5px 7px, 5px 9px, 5px 8px;
+  background-position:0 0, 5px 3px, 10px 5px;
+  background-repeat:repeat-y;
+  filter:drop-shadow(0 0 1.8px rgba(255,247,228,.85)) drop-shadow(0 0 5px rgba(236,215,162,.35));
+  /* تتلاشى نزولاً فلا تنتهي بحافّة مقصوصة */
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.25) 0%, #000 14%, #000 52%, transparent 100%);
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.25) 0%, #000 14%, #000 52%, transparent 100%);
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  opacity:.6;
+  /* ⚠️ متغيّران منفصلان: السكربت كان يكتب animation-duration واحدة لاختصارٍ
+     فيه حركتان، فتُسحق مدّة التأرجح من ٧٫٥ث إلى مدّة التوهّج. */
+  animation:strandGlow var(--glowDur,4s) ease-in-out var(--glowDelay,0s) infinite,
+            strandSway var(--swayDur,7.5s) ease-in-out var(--swayDelay,0s) infinite;
+  transform-origin:50% 0;
+}
+@keyframes strandGlow{0%,100%{opacity:.38}50%{opacity:.8}}
+@keyframes strandSway{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
+
+/* ===== الأقسام ===== */
+.sec{
+  position:relative; z-index:2;
+  max-width:560px; margin:0 auto;
+  padding:40px 26px; text-align:center;
+}
+.creveal{
+  opacity:0; transform:translateY(-26px);
+  transition:opacity .8s ease, transform 1.05s cubic-bezier(.22,1.15,.36,1);
+}
+.creveal.is-visible{opacity:1; transform:none}
+
+.sec__title{
+  position:relative; display:inline-block;
+  margin:0 0 22px; padding:0 4px .8em;
+  font-family:var(--disp); font-weight:700;
+  font-size:clamp(1.62rem, 6.8vw, 2.05rem); color:var(--umber);
+}
+/* قوس صغير تحت العنوان — صدى قنطرة الباب */
+.sec__title::after{
+  content:""; position:absolute; inset:auto 0 0 0;
+  height:11px;
+  border-top:1px solid rgba(142,105,47,.55);
+  border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* قنديل — الزخرفة الأساسية بدل الأيقونات المكرّرة */
+.lamp{
+  display:block; width:12px; height:12px; margin:0 auto 18px;
+  border-radius:50%;
+  background:radial-gradient(circle at 42% 36%, #fff7e4 0%, var(--gold-hi) 42%, var(--gold) 100%);
+  box-shadow:0 0 16px rgba(236,215,162,.9), 0 0 34px rgba(194,153,79,.42);
+  position:relative;
+}
+.lamp::before{
+  content:""; position:absolute; inset:auto 50% 100% 50%;
+  width:1px; height:26px; margin-right:-.5px;
+  background:linear-gradient(180deg, transparent, rgba(194,153,79,.55));
+}
+
+/* فاصل: خيط ضوء أفقي بقنديل بوسطه */
+.divider{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  max-width:340px; margin:0 auto; padding:4px 26px;
+}
+.divider i{
+  flex:1 1 auto; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(142,105,47,.42), transparent);
+}
+.divider span{
+  font-size:.72rem; color:var(--gold-ink);
+  text-shadow:0 0 10px rgba(236,215,162,.5);
+}
+
+/* ===== الآية ===== */
+.verse{padding-top:46px}
+.bismillah{
+  margin:0 0 20px;
+  font-family:var(--disp); font-weight:700; font-size:1.14rem; color:var(--gold-ink);
+}
+.verse__text{
+  margin:0 auto; max-width:26ch;
+  font-family:var(--serif); font-weight:700;
+  font-size:clamp(1.18rem, 5vw, 1.42rem);
+  line-height:2.1;
+  color:var(--mocha);
+  white-space:pre-line;
+  text-wrap:balance;   /* ⚠️ بعد white-space لا قبلها: المختصرة تمحوها صامتةً */
+}
+
+/* ===== بطاقة الدعوة ===== */
+.invitation__text{
+  margin:0; font-size:1.04rem; line-height:2.15; color:var(--ink);
+  font-weight:400; white-space:pre-line;
+}
+
+/* ===== العائلتان ===== */
+.families{
+  display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center; gap:14px;
+}
+.family__label{
+  display:block; margin-bottom:8px;
+  font-size:.76rem; word-spacing:.26em; color:var(--taupe);
+}
+.family__names{
+  margin:0; font-family:var(--serif); font-size:.99rem; line-height:1.85;
+  color:var(--mocha); white-space:pre-line;
+}
+.families__heart{
+  font-size:.9rem; color:var(--gold-ink);
+  text-shadow:0 0 10px rgba(236,215,162,.5);
+}
+
+/* ===== العدّاد: أربعة قناديل معلّقة ===== */
+.countdown{
+  display:grid; grid-template-columns:repeat(4, minmax(0,1fr));
+  gap:.55rem; max-width:360px;
+  /* ٢٢ (هامش العنوان) + ٤ + ٢٦ (الخيط) = ٥٢ = المسافة السابقة بالضبط،
+     فلا تتحرّك بطاقة بكسلاً والخيط يشغل فراغاً موجوداً أصلاً. */
+  position:relative; margin:4px auto 0; padding-top:26px;
+}
+.cd__u{
+  position:relative;
+  min-width:0; padding:1rem .25rem .8rem;
+  border:1px solid rgba(194,153,79,.34);
+  border-radius:1.6rem 1.6rem .7rem .7rem;
+  background:linear-gradient(180deg, rgba(255,253,248,.92) 0%, rgba(250,242,229,.7) 100%);
+  box-shadow:0 10px 26px rgba(109,81,56,.10), inset 0 1px 0 rgba(255,255,255,.9);
+}
+/* السلك — منسوخ حرفياً من .lamp::before فيقرأه القالب لغته لا زخرفة جديدة */
+.cd__u::before{
+  content:""; position:absolute; inset:auto 50% 100% 50%;
+  width:1px; height:26px; margin-right:-.5px;
+  background:linear-gradient(180deg, transparent, rgba(194,153,79,.55));
+}
+.cd__n{
+  display:block;
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.6rem, 7.6vw, 2.35rem); line-height:1;
+  color:var(--gold-ink);
+  text-shadow:0 1px 0 rgba(255,255,255,.8);
+}
+.cd__l{
+  display:block; margin-top:.55rem;
+  font-size:.76rem; color:var(--ink-soft);
+}
+.count__arrived{
+  margin:22px 0 0; font-family:var(--serif); font-size:1.05rem; color:var(--gold-ink);
+}
+
+/* ===== البرنامج: خيط الضوء هو خطّ الوقت ===== */
+.sched{position:relative; margin-top:26px; padding:4px 0}
+.sched__line{
+  position:absolute; top:6px; bottom:6px; right:50%;
+  width:1px; margin-right:-.5px;
+  background:linear-gradient(180deg, transparent, rgba(142,105,47,.42) 12%, rgba(142,105,47,.42) 88%, transparent);
+}
+.sched__row{
+  position:relative;
+  display:grid; grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);
+  align-items:center; gap:8px;
+  padding:13px 0;
+}
+.sched__time{
+  font-family:var(--serif); font-weight:700;
+  font-size:clamp(1.18rem, 4.6vw, 1.35rem);
+  line-height:1.5; color:var(--gold-ink);
+  text-align:left; padding-left:6px;
+}
+.sched__dot{
+  width:9px; height:9px; margin:0 auto; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #fff7e4, var(--gold-hi) 45%, var(--gold));
+  box-shadow:0 0 12px rgba(236,215,162,.95), 0 0 24px rgba(194,153,79,.4);
+}
+.sched__event{
+  font-size:clamp(.95rem, 3.8vw, 1.05rem);
+  line-height:1.6; color:var(--mocha);
+  text-align:right; padding-right:6px;
+}
+
+/* ===== المكان ===== */
+.venue__photo{
+  display:none;                          /* الإظهار من .venue.has-photo */
+  width:100%; max-width:300px; height:250px; margin:0 auto 18px;
+  border-radius:150px 150px 18px 18px;   /* قنطرة — صدى الباب */
+  background-color:#e7dcc0;              /* وإلا بانت قنطرة مثقوبة ريثما تُحمّل */
+  background-size:cover; background-position:center;
+  border:1px solid rgba(194,153,79,.34);
+  box-shadow:0 14px 34px rgba(109,81,56,.16);
+}
+.venue.has-photo .venue__photo{display:block}
+.venue__name{
+  margin:0 0 8px; font-family:var(--disp); font-weight:700; font-size:1.2rem; color:var(--mocha);
+}
+.venue__addr{margin:0 0 20px; font-size:.93rem; color:var(--ink-soft); white-space:pre-line}
+.venue__map{
+  display:inline-flex; align-items:center; gap:9px;
+  padding:12px 30px; border-radius:999px;
+  /* ذهبٌ مُضاء لا معدنٌ مصقول: كل ذهب الصورة ضوء، ولا انعكاس معدني فيها */
+  background:linear-gradient(180deg, #dcb877 0%, var(--gold) 100%);
+  border:1px solid rgba(255,241,205,.40);
+  color:#3a2a16; text-decoration:none; font-weight:700; font-size:.94rem;
+  box-shadow:0 10px 26px rgba(194,153,79,.28),
+             0 0 26px rgba(236,215,162,.45),
+             inset 0 1px 0 rgba(255,250,235,.65);
+  transition:transform .16s cubic-bezier(.3,.8,.4,1), box-shadow .25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+/* ⚠️ الهوفر محاطٌ بـhover:hover: على آيفون يعلق بعد النقر فيبقى الزرّ
+   مرفوعاً وتُمحى هالته (box-shadow يستبدل ولا يتراكم) بقيّة الجلسة. */
+@media (hover:hover){
+  .venue__map:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 32px rgba(194,153,79,.34),
+               0 0 30px rgba(236,215,162,.55),
+               inset 0 1px 0 rgba(255,250,235,.7);
+  }
+}
+.venue__map:active{
+  transform:translateY(0) scale(.965);
+  box-shadow:0 6px 16px rgba(194,153,79,.3),
+             0 0 18px rgba(236,215,162,.4),
+             inset 0 1px 0 rgba(255,250,235,.65);
+}
+
+/* ===== التنويهات ===== */
+.notes__list{margin:0; padding:0; list-style:none; text-align:right}
+.notes__item{
+  display:flex; align-items:flex-start; gap:11px;
+  padding:11px 0; font-size:.94rem; line-height:1.9; color:var(--ink);
+  border-bottom:1px solid rgba(194,153,79,.18);
+}
+.notes__item:last-child{border-bottom:none}
+.notes__mark{
+  flex:0 0 auto; margin-top:.55em;
+  width:6px; height:6px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #fff8e6, #d9b878 55%, #96702c 100%);
+  box-shadow:0 0 9px rgba(236,215,162,.7);
+}
+
+/* ===== التواصل ===== */
+.contact__label{
+  display:block; margin-bottom:12px;
+  font-size:.78rem; word-spacing:.26em; color:var(--taupe);
+}
+.contact__link{
+  display:inline-flex; align-items:center; gap:9px;
+  padding:11px 26px; border-radius:999px; max-width:100%;
+  border:1px solid rgba(194,153,79,.34);
+  /* نفس مادّة بطاقة العدّاد — كريميٌّ منقوش لكل فعلٍ عدا الخريطة.
+     هدوءه مقصود: ذهبٌ ممتلئ لفعلٍ واحد فقط. */
+  background:linear-gradient(180deg, rgba(255,253,248,.95) 0%, rgba(250,242,229,.78) 100%);
+  box-shadow:0 8px 20px rgba(109,81,56,.10), inset 0 1px 0 rgba(255,255,255,.9);
+  color:var(--mocha); text-decoration:none;
+  font-family:var(--serif); font-weight:400; font-size:1.05rem;
+  transition:transform .16s cubic-bezier(.3,.8,.4,1), background-color .2s ease, border-color .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.contact__link:active{
+  transform:scale(.965);
+  background:rgba(236,220,196,.92);
+  border-color:rgba(194,153,79,.62);
+}
+
+/* ===== الختام على الأرضية العاكسة ===== */
+.closing{padding-bottom:52px}
+.closing__note{
+  margin:0 0 16px; font-family:var(--serif); font-size:1.08rem;
+  line-height:2.1; color:var(--mocha); white-space:pre-line;
+}
+.closing__families{
+  margin:0 0 10px; font-family:var(--disp); font-size:1.06rem; color:var(--gold-ink);
+}
+.closing__hashtag{
+  margin:0; font-size:.9rem; letter-spacing:.05em; color:var(--taupe);
+}
+.closing__hashtag:empty{display:none}
+/* أرضية القاعة: انعكاس ناعم يقفل الصفحة */
+.hall__floor{
+  /* ارتفاعٌ محسوب لا ثابت: بطاقة «دعوة» تسكن داخلها، فالرخام يمتدّ خلفها */
+  position:relative; min-height:170px; padding-top:38px; overflow:hidden;
+  background:linear-gradient(180deg, #e7d6bc 0%, #f2e7d4 30%, #ece0ca 66%, #ddcaad 100%);
+}
+/* رخام الصورة نفسها — القصّة تُقفل على المادّة التي فُتحت عليها */
+.hall__floor::after{
+  content:""; position:absolute; inset:0; z-index:0;
+  background:url("../new_assets/thurayya-floor.jpg") 50% 0/cover;
+  opacity:.48;
+  /* يثبت حتى القاع: الصفحة تنتهي هنا، فتلاشيه قبلها يُظهر الرخام مقطوعاً */
+  -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 20%, #000 100%);
+  mask-image:linear-gradient(180deg, transparent 0%, #000 20%, #000 100%);
+}
+/* خطّ الأفق: وميضٌ ناعم حيث تلتقي الستائر بالأرضية بدل حافّة قاطعة.
+   z-index صريح على الاثنين: ::after يُرسم فوقه بترتيب المصدر فيطمسه. */
+.hall__floor::before{
+  content:""; position:absolute; inset:0 0 auto 0; height:26px; z-index:1;
+  background:linear-gradient(180deg, rgba(236,220,196,.9) 0%, rgba(255,250,240,.55) 45%, transparent 100%);
+}
+
+/* ============================================================
+   الأقسام المحقونة من المنصّة (تأكيد الحضور، التقويم، الملاحظة)
+   ⚠️ box-sizing يُضبط صراحةً — الأقسام المحقونة لا ترث قاعدة الصفحة
+   ============================================================ */
+#da3wa-rsvp, #da3wa-note, #da3wa-calendar{position:relative; z-index:2}
+#da3wa-rsvp *, #da3wa-note *, #da3wa-calendar *{box-sizing:border-box}
+
+/* ============================================================
+   شاشات أضيق
+   ============================================================ */
+@media (max-width:380px){
+  .sec{padding:34px 20px}
+  .countdown{gap:.38rem}
+  .cd__u{padding-inline:.1rem}
+  .cd__l{font-size:.72rem}
+  .sched__row{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .stage__photo{animation:none; transform:none}
+  .strand, .cover__ring, .cover__ring b, .cover__hint, .scroll-cue b, .plaque{animation:none}
+  .glints, .crystal-dust{display:none}
+  .sreveal, .creveal{opacity:1; transform:none; transition:none}
+}

@@ -8,6 +8,7 @@ let toastTimer;
 
 function hydrateCopy() {
   document.title = copy.pageTitle;
+  $('#verse-section').setAttribute('aria-label', copy.verseLabel);
   document.querySelectorAll('[data-copy]').forEach((node) => {
     node.textContent = copy[node.dataset.copy] || '';
   });
@@ -62,6 +63,8 @@ function downloadCalendar(start, end) {
 function renderEvent() {
   const start = eventStart();
   if (!start) return;
+  $('#hero-date').hidden = false;
+  $('#hero-date').textContent = new Intl.DateTimeFormat('ar', { timeZone: config.timeZone, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(start);
   $('#countdown-section').hidden = false;
   updateCountdown(start);
   window.setInterval(() => updateCountdown(start), 1000);
@@ -87,11 +90,17 @@ function renderOptionalSections() {
     $('#program-section').hidden = false;
     $('#program-list').replaceChildren(...program.map(({ time, title }) => {
       const row = document.createElement('li');
+      row.className = 'sched__row';
       const label = document.createElement('span');
+      label.className = 'sched__event';
       label.textContent = title;
+      const dot = document.createElement('span');
+      dot.className = 'sched__dot';
+      dot.setAttribute('aria-hidden', 'true');
       const clock = document.createElement('time');
+      clock.className = 'sched__time';
       clock.textContent = time;
-      row.append(label, clock);
+      row.append(label, dot, clock);
       return row;
     }));
   }
@@ -111,6 +120,7 @@ function renderOptionalSections() {
     $('#notes-list').replaceChildren(...config.guestNotes.map((note) => {
       const item = document.createElement('li');
       item.textContent = note;
+      item.className = 'notes__item';
       return item;
     }));
   }
