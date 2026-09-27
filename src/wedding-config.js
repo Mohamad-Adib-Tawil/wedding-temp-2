@@ -1,8 +1,8 @@
 /** Single source for names, copy, event details, links, and media paths. */
 export const weddingConfig = Object.freeze({
   siteUrl: 'https://mohamad-adib-tawil.github.io/wedding-temp-2/',
-  groom: { ar: 'محمد أديب طويل', en: 'Mohamad Adib Tawil' },
-  bride: { ar: 'رزان بطايحي', en: 'Razan Bataihi' },
+  groom: { ar: 'محمد أديب طويل', displayAr: 'محمد', en: 'Mohamad Adib Tawil' },
+  bride: { ar: 'رزان بطايحي', displayAr: 'رزان', en: 'Razan Bataihi' },
   weddingDate: '', // YYYY-MM-DD
   startTime: '', // HH:MM, local venue time
   endTime: '',
@@ -18,7 +18,7 @@ export const weddingConfig = Object.freeze({
     deadline: '',
   },
   audioPath: 'assets/audio/nocturne-original.wav',
-  socialPreviewPath: 'new_assets/social-preview.jpg',
+  socialPreviewPath: 'new_assets/social-preview-facing.jpg',
   copy: {
     pageTitle: 'دعوة زفاف محمد أديب طويل ورزان بطايحي',
     pageDescription: 'دعوة زفاف محمد أديب طويل ورزان بطايحي. يسعدنا أن تشاركونا فرحتنا.',
@@ -33,6 +33,7 @@ export const weddingConfig = Object.freeze({
     heroKicker: 'على وعدٍ بليلةٍ لا تُنسى',
     heroLine: 'حين يلتقي قلبان، تكتمل الحكاية بحضوركم',
     scroll: 'اكتشفوا الدعوة',
+    bismillah: 'بسم الله الرحمن الرحيم',
     invitationTitle: 'إلى من نحب',
     invitationMessage: 'بكل الحب، ندعوكم لتشاركونا فرحة زفافنا. وجودكم معنا يجعل هذه الليلة أجمل.',
     countdownTitle: 'حتى نلتقي',

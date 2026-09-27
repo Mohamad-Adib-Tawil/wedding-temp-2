@@ -13,6 +13,8 @@ function hydrateCopy() {
   });
   document.querySelectorAll('[data-name="groom"]').forEach((node) => { node.textContent = config.groom.ar; });
   document.querySelectorAll('[data-name="bride"]').forEach((node) => { node.textContent = config.bride.ar; });
+  document.querySelectorAll('[data-name="groomDisplay"]').forEach((node) => { node.textContent = config.groom.displayAr; });
+  document.querySelectorAll('[data-name="brideDisplay"]').forEach((node) => { node.textContent = config.bride.displayAr; });
   $('#open-invitation').setAttribute('aria-label', `${copy.open}: ${config.groom.ar} و${config.bride.ar}`);
 }
 

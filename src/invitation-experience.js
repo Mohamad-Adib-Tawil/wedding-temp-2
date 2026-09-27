@@ -66,14 +66,15 @@ export function initExperience(config, showToast) {
       return;
     }
     root.dataset.stage = 'opening';
+    root.dataset.flash = 'on';
     schedule(() => {
       root.dataset.stage = 'hall';
       hallContent.hidden = false;
-    }, 1200);
-    schedule(() => { root.dataset.reveal = '1'; }, 1800);
-    schedule(() => { root.dataset.reveal = '2'; }, 2400);
-    schedule(() => { root.dataset.reveal = '3'; }, 3200);
-    schedule(revealSite, 6500);
+    }, 2400);
+    schedule(() => { root.dataset.reveal = '1'; }, 3300);
+    schedule(() => { root.dataset.reveal = '2'; }, 4100);
+    schedule(() => { root.dataset.reveal = '3'; }, 5000);
+    schedule(revealSite, 10500);
   }
 
   function replay() {
@@ -88,6 +89,7 @@ export function initExperience(config, showToast) {
     document.body.classList.add('is-locked');
     root.hidden = false;
     root.dataset.stage = 'cover';
+    root.dataset.flash = 'off';
     root.dataset.reveal = '0';
     coverContent.inert = false;
     hallContent.hidden = true;
